@@ -20,6 +20,9 @@
       "path": "./packages/cactus-plugin-consortium-manual/tsconfig.json"
     },
     {
+      "path": "./packages/cactus-plugin-htlc-eth-besu/tsconfig.json"
+    },
+    {
       "path": "./packages/cactus-plugin-htlc-eth-besu-erc20/tsconfig.json"
     },
     {
@@ -35,13 +38,10 @@
       "path": "./packages/cactus-plugin-keychain-memory/tsconfig.json"
     },
     {
-      "path": "./packages/cactus-plugin-htlc-eth-besu/tsconfig.json"
+      "path": "./packages/cactus-plugin-keychain-vault/tsconfig.json"
     },
     {
       "path": "./packages/cactus-plugin-ledger-connector-besu/tsconfig.json"
-    },
-    {
-      "path": "./packages/cactus-plugin-keychain-vault/tsconfig.json"
     },
     {
       "path": "./packages/cactus-plugin-ledger-connector-corda/tsconfig.json"
@@ -86,10 +86,10 @@
       "path": "./examples/cactus-example-carbon-accounting-business-logic-plugin/tsconfig.json"
     },
     {
-      "path": "./examples/cactus-example-supply-chain-backend/tsconfig.json"
+      "path": "./examples/cactus-example-carbon-accounting-frontend/tsconfig.json"
     },
     {
-      "path": "./examples/cactus-example-carbon-accounting-frontend/tsconfig.json"
+      "path": "./examples/cactus-example-supply-chain-backend/tsconfig.json"
     },
     {
       "path": "./examples/cactus-example-supply-chain-business-logic-plugin/tsconfig.json"

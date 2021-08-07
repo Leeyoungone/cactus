@@ -76,6 +76,57 @@
           }
         }
       }
+    },
+    "/api/v1/plugins/@hyperledger/cactus-plugin-keychain-google-sm/delete-keychain-entry": {
+      "post": {
+        "x-hyperledger-cactus": {
+          "http": {
+            "path": "/api/v1/plugins/@hyperledger/cactus-plugin-keychain-google-sm/delete-keychain-entry",
+            "verbLowerCase": "post"
+          }
+        },
+        "operationId": "deleteKeychainEntryV1",
+        "summary": "Deletes an entry under a key on the keychain backend.",
+        "parameters": [],
+        "requestBody": {
+          "$ref": "../../../../cactus-core-api/src/main/json/openapi.json#/components/requestBodies/keychain_delete_entry_request_body"
+        },
+        "responses": {
+          "200": {
+            "$ref": "../../../../cactus-core-api/src/main/json/openapi.json#/components/responses/keychain_delete_entry_200"
+          }
+        }
+      }
+    },
+    "/api/v1/plugins/@hyperledger/cactus-plugin-keychain-google-sm/has-keychain-entry": {
+      "post": {
+        "x-hyperledger-cactus": {
+          "http": {
+            "path": "/api/v1/plugins/@hyperledger/cactus-plugin-keychain-google-sm/has-keychain-entry",
+            "verbLowerCase": "post"
+          }
+        },
+        "operationId": "hasKeychainEntryV1",
+        "summary": "Checks that an entry exists under a key on the keychain backend.",
+        "parameters": [],
+        "requestBody": {
+          "$ref": "../../../../cactus-core-api/src/main/json/openapi.json#/components/requestBodies/keychain_has_entry_request_body"
+        },
+        "responses": {
+          "200": {
+            "$ref": "../../../../cactus-core-api/src/main/json/openapi.json#/components/responses/keychain_has_entry_200"
+          },
+          "400": {
+            "$ref": "../../../../cactus-core-api/src/main/json/openapi.json#/components/responses/keychain_has_entry_400"
+          },
+          "401": {
+            "$ref": "../../../../cactus-core-api/src/main/json/openapi.json#/components/responses/keychain_has_entry_401"
+          },
+          "500": {
+            "$ref": "../../../../cactus-core-api/src/main/json/openapi.json#/components/responses/keychain_has_entry_500" 
+          }
+        }
+      }
     }
   }
-} 
+}
