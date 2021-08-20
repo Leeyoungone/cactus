@@ -540,19 +540,42 @@
                 }
             },
             "HasKeychainEntryRequestV1": {
-                "type": "object",
-                "required": [
-                    "key"
-                ],
-                "properties": {
-                    "key": {
-                        "type": "string",
-                        "description": "The key to check for presence in the keychain.",
-                        "minLength": 1,
-                        "maxLength": 1024,
-                        "nullable": false
-                    }
+              "type": "object", 
+              "required": [
+                  "key"
+              ],
+              "properties": {
+                  "key": {
+                      "type": "string",
+                      "description": "The key to check for presence in the keychain.",
+                      "minLength": 1,
+                      "maxLength": 1024,
+                      "nullable": false
+                  }
+              }
+            },
+            "HasKeychainEntryResponseV1": {
+              "type": "object",
+              "required": ["key", "isPresent", "checkedAt"],
+              "properties": {
+                "key": {
+                  "type": "string",
+                  "description": "The key that was used to check the presence of the value in the entry store.",
+                  "minLength": 1,
+                  "maxLength": 1024,
+                  "nullable": false
+                },
+                "checkedAt": {
+                  "type": "string",
+                  "description": "Date and time encoded as JSON when the presence check was performed by the plugin backend.",
+                  "nullable": false
+                },
+                "isPresent": {
+                  "type": "boolean",
+                  "description": "The boolean true or false indicating the presence or absence of an entry under 'key'.",
+                  "nullable": false
                 }
+              }
             },
             "GetKeychainEntryRequest": {
                 "type": "object",
@@ -723,7 +746,7 @@
                 "content": {
                     "application/json": {
                         "schema": {
-                            "$ref": "#/components/schemas/HasKeychainEntryRequestV1"
+                            "$ref": "#/components/schemas/HasKeychainEntryResponseV1"
                         }
                     }
                 }

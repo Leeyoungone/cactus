@@ -95,6 +95,31 @@ export interface HasKeychainEntryRequestV1 {
 /**
  * 
  * @export
+ * @interface HasKeychainEntryResponseV1
+ */
+export interface HasKeychainEntryResponseV1 {
+    /**
+     * The key that was used to check the presence of the value in the entry store.
+     * @type {string}
+     * @memberof HasKeychainEntryResponseV1
+     */
+    key: string;
+    /**
+     * Date and time encoded as JSON when the presence check was performed by the plugin backend.
+     * @type {string}
+     * @memberof HasKeychainEntryResponseV1
+     */
+    checkedAt: string;
+    /**
+     * The boolean true or false indicating the presence or absence of an entry under \'key\'.
+     * @type {boolean}
+     * @memberof HasKeychainEntryResponseV1
+     */
+    isPresent: boolean;
+}
+/**
+ * 
+ * @export
  * @interface SetKeychainEntryRequest
  */
 export interface SetKeychainEntryRequest {
@@ -206,13 +231,13 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
         /**
          * 
          * @summary Checks that an entry exists under a key on the keychain backend.
-         * @param {HasKeychainEntryRequestV1} hasKeychainEntryRequestV1 Request body to write/update a keychain entry via its key
+         * @param {HasKeychainEntryResponseV1} hasKeychainEntryResponseV1 Request body to write/update a keychain entry via its key
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        hasKeychainEntryV1: async (hasKeychainEntryRequestV1: HasKeychainEntryRequestV1, options: any = {}): Promise<RequestArgs> => {
-            // verify required parameter 'hasKeychainEntryRequestV1' is not null or undefined
-            assertParamExists('hasKeychainEntryV1', 'hasKeychainEntryRequestV1', hasKeychainEntryRequestV1)
+        hasKeychainEntryV1: async (hasKeychainEntryResponseV1: HasKeychainEntryResponseV1, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'hasKeychainEntryResponseV1' is not null or undefined
+            assertParamExists('hasKeychainEntryV1', 'hasKeychainEntryResponseV1', hasKeychainEntryResponseV1)
             const localVarPath = `/api/v1/plugins/@hyperledger/cactus-plugin-keychain-google-sm/has-keychain-entry`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -232,7 +257,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(hasKeychainEntryRequestV1, localVarRequestOptions, configuration)
+            localVarRequestOptions.data = serializeDataIfNeeded(hasKeychainEntryResponseV1, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -310,12 +335,12 @@ export const DefaultApiFp = function(configuration?: Configuration) {
         /**
          * 
          * @summary Checks that an entry exists under a key on the keychain backend.
-         * @param {HasKeychainEntryRequestV1} hasKeychainEntryRequestV1 Request body to write/update a keychain entry via its key
+         * @param {HasKeychainEntryResponseV1} hasKeychainEntryResponseV1 Request body to write/update a keychain entry via its key
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async hasKeychainEntryV1(hasKeychainEntryRequestV1: HasKeychainEntryRequestV1, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<HasKeychainEntryRequestV1>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.hasKeychainEntryV1(hasKeychainEntryRequestV1, options);
+        async hasKeychainEntryV1(hasKeychainEntryResponseV1: HasKeychainEntryResponseV1, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<HasKeychainEntryRequestV1>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.hasKeychainEntryV1(hasKeychainEntryResponseV1, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
@@ -362,12 +387,12 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
         /**
          * 
          * @summary Checks that an entry exists under a key on the keychain backend.
-         * @param {HasKeychainEntryRequestV1} hasKeychainEntryRequestV1 Request body to write/update a keychain entry via its key
+         * @param {HasKeychainEntryResponseV1} hasKeychainEntryResponseV1 Request body to write/update a keychain entry via its key
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        hasKeychainEntryV1(hasKeychainEntryRequestV1: HasKeychainEntryRequestV1, options?: any): AxiosPromise<HasKeychainEntryRequestV1> {
-            return localVarFp.hasKeychainEntryV1(hasKeychainEntryRequestV1, options).then((request) => request(axios, basePath));
+        hasKeychainEntryV1(hasKeychainEntryResponseV1: HasKeychainEntryResponseV1, options?: any): AxiosPromise<HasKeychainEntryRequestV1> {
+            return localVarFp.hasKeychainEntryV1(hasKeychainEntryResponseV1, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -416,13 +441,13 @@ export class DefaultApi extends BaseAPI {
     /**
      * 
      * @summary Checks that an entry exists under a key on the keychain backend.
-     * @param {HasKeychainEntryRequestV1} hasKeychainEntryRequestV1 Request body to write/update a keychain entry via its key
+     * @param {HasKeychainEntryResponseV1} hasKeychainEntryResponseV1 Request body to write/update a keychain entry via its key
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof DefaultApi
      */
-    public hasKeychainEntryV1(hasKeychainEntryRequestV1: HasKeychainEntryRequestV1, options?: any) {
-        return DefaultApiFp(this.configuration).hasKeychainEntryV1(hasKeychainEntryRequestV1, options).then((request) => request(this.axios, this.basePath));
+    public hasKeychainEntryV1(hasKeychainEntryResponseV1: HasKeychainEntryResponseV1, options?: any) {
+        return DefaultApiFp(this.configuration).hasKeychainEntryV1(hasKeychainEntryResponseV1, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**

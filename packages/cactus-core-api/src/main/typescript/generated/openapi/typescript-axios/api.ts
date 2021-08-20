@@ -364,6 +364,31 @@ export interface HasKeychainEntryRequestV1 {
 /**
  * 
  * @export
+ * @interface HasKeychainEntryResponseV1
+ */
+export interface HasKeychainEntryResponseV1 {
+    /**
+     * The key that was used to check the presence of the value in the entry store.
+     * @type {string}
+     * @memberof HasKeychainEntryResponseV1
+     */
+    key: string;
+    /**
+     * Date and time encoded as JSON when the presence check was performed by the plugin backend.
+     * @type {string}
+     * @memberof HasKeychainEntryResponseV1
+     */
+    checkedAt: string;
+    /**
+     * The boolean true or false indicating the presence or absence of an entry under \'key\'.
+     * @type {boolean}
+     * @memberof HasKeychainEntryResponseV1
+     */
+    isPresent: boolean;
+}
+/**
+ * 
+ * @export
  * @interface HasObjectRequestV1
  */
 export interface HasObjectRequestV1 {

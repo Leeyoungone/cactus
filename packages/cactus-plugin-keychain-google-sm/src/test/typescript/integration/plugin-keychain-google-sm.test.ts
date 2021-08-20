@@ -7,11 +7,6 @@ import { AddressInfo } from "net";
 import { IListenOptions, Servers } from "@hyperledger/cactus-common";
 
 import { v4 as uuidv4 } from "uuid";
-// import {
-//   Containers,
-//   LocalStackContainers,
-//   AwsCredentialType,
-// } from "../../../main/typescript/public-api";
 
 import { LogLevelDesc } from "@hyperledger/cactus-common";
 
@@ -85,6 +80,8 @@ test("get,set,has,delete alters state as expected", async (t: Test) => {
 
   await apiClient.hasKeychainEntryV1({
     key: key,
+    isPresent: true,
+    checkedAt: key,
   });
 
   await plugin.set(key, value);
@@ -105,18 +102,46 @@ test("get,set,has,delete alters state as expected", async (t: Test) => {
 
   const valueAfterDelete = plugin.get(key);
 
+  const regExp = new RegExp(/secret not found*/);
+  const rejectMsg = "valueAfterDelete === throws OK";
+  await t.rejects(valueAfterDelete, regExp, rejectMsg);
+
   await plugin.registerWebServices(expressApp);
 
-  await apiClient.setKeychainEntryV1({
+  const res1 = await apiClient.setKeychainEntryV1({
     key: key,
     value: value,
   });
 
+  t.ok(res1.status >= 200, "res1 status >= 200 OK");
+  t.ok(res1.status < 300, "res1 status < 300 OK");
+  t.equal(res1.data.key, key, "res1.data.key === key OK");
+
+  const res2 = await apiClient.hasKeychainEntryV1({
+    key: key,
+    isPresent: true,
+    checkedAt: key,
+  });
+
+  t.ok(res2.status >= 200, "res2 status >= 200 OK");
+  t.ok(res2.status < 300, "res2 status < 300 OK");
+  // this does not compile just yet because the openapi.json also needs to be
+  // fixed (and then the code rebuilt so that the code generator creates/updates)
+  // the type definitions
+  t.true(res2.data.isPresent, key, "res2.data.isPresent === true OK");
+
   await apiClient.deleteKeychainEntryV1({
     key: key,
   });
-  const regExp = new RegExp(/secret not found*/);
-  const rejectMsg = "valueAfterDelete === throws OK";
-  await t.rejects(valueAfterDelete, regExp, rejectMsg);
+
+  const hasAfterDelete1 = await plugin.has(key);
+  t.false(hasAfterDelete1, "hasAfterDelete1 === false OK");
+
+  const valueAfterDelete1 = await plugin.get(key);
+  t.notok(valueAfterDelete1, "valueAfterDelete1 falsy OK");
+
+  // TODO: Also write the test assertions here to verify that the deletion has
+  // indeed disappeared the record as expected.
+
   t.end();
 });
