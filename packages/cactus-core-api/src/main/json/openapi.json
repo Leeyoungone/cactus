@@ -799,7 +799,7 @@
                 "content": {
                    "application/json": {
                       "schema": {
-                         "$ref": "#/components/schemas/HasKeychainEntryRequestV1"
+                         "$ref": "#/components/schemas/HasKeychainEntryResponseV1"
                       }
                    }
                 }

@@ -82,19 +82,6 @@ export interface GetKeychainEntryResponse {
 /**
  * 
  * @export
- * @interface HasKeychainEntryRequestV1
- */
-export interface HasKeychainEntryRequestV1 {
-    /**
-     * The key to check for presence in the keychain.
-     * @type {string}
-     * @memberof HasKeychainEntryRequestV1
-     */
-    key: string;
-}
-/**
- * 
- * @export
  * @interface HasKeychainEntryResponseV1
  */
 export interface HasKeychainEntryResponseV1 {
@@ -339,7 +326,7 @@ export const DefaultApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async hasKeychainEntryV1(hasKeychainEntryResponseV1: HasKeychainEntryResponseV1, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<HasKeychainEntryRequestV1>> {
+        async hasKeychainEntryV1(hasKeychainEntryResponseV1: HasKeychainEntryResponseV1, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<HasKeychainEntryResponseV1>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.hasKeychainEntryV1(hasKeychainEntryResponseV1, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
@@ -391,7 +378,7 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        hasKeychainEntryV1(hasKeychainEntryResponseV1: HasKeychainEntryResponseV1, options?: any): AxiosPromise<HasKeychainEntryRequestV1> {
+        hasKeychainEntryV1(hasKeychainEntryResponseV1: HasKeychainEntryResponseV1, options?: any): AxiosPromise<HasKeychainEntryResponseV1> {
             return localVarFp.hasKeychainEntryV1(hasKeychainEntryResponseV1, options).then((request) => request(axios, basePath));
         },
         /**

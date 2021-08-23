@@ -115,7 +115,7 @@ test("get,set,has,delete alters state as expected", async (t: Test) => {
 
   t.ok(res1.status >= 200, "res1 status >= 200 OK");
   t.ok(res1.status < 300, "res1 status < 300 OK");
-  t.equal(res1.data.key, key, "res1.data.key === key OK");
+  t.equal(res1.data.key, key, "res1.data.key === key OK"); //here is where it is
 
   const res2 = await apiClient.hasKeychainEntryV1({
     key: key,
@@ -128,7 +128,7 @@ test("get,set,has,delete alters state as expected", async (t: Test) => {
   // this does not compile just yet because the openapi.json also needs to be
   // fixed (and then the code rebuilt so that the code generator creates/updates)
   // the type definitions
-  t.true(res2.data.isPresent, key, "res2.data.isPresent === true OK");
+  t.true(res2.data.isPresent, "res2.data.isPresent === true OK");
 
   await apiClient.deleteKeychainEntryV1({
     key: key,
