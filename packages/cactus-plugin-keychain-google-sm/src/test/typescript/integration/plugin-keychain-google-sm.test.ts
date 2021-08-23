@@ -80,12 +80,11 @@ test("get,set,has,delete alters state as expected", async (t: Test) => {
 
   await apiClient.hasKeychainEntryV1({
     key: key,
-    isPresent: true,
-    checkedAt: key,
   });
 
   await plugin.set(key, value);
-  await plugin.set(key, value);
+  //await plugin.set(key, value);
+  //why are there two plugins called
 
   const hasAfter = await plugin.has(key);
   t.true(hasAfter, "hasAfter === true OK");
@@ -115,12 +114,12 @@ test("get,set,has,delete alters state as expected", async (t: Test) => {
 
   t.ok(res1.status >= 200, "res1 status >= 200 OK");
   t.ok(res1.status < 300, "res1 status < 300 OK");
-  t.equal(res1.data.key, key, "res1.data.key === key OK"); //here is where it is
+  t.equal(res1.data.key, "equal res1.data.key, key OK"); //here is where it is
+  console.log("==================================================");
+  console.log(res1);
 
   const res2 = await apiClient.hasKeychainEntryV1({
     key: key,
-    isPresent: true,
-    checkedAt: key,
   });
 
   t.ok(res2.status >= 200, "res2 status >= 200 OK");
@@ -128,6 +127,8 @@ test("get,set,has,delete alters state as expected", async (t: Test) => {
   // this does not compile just yet because the openapi.json also needs to be
   // fixed (and then the code rebuilt so that the code generator creates/updates)
   // the type definitions
+  console.log("wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww");
+  console.log(res2);
   t.true(res2.data.isPresent, "res2.data.isPresent === true OK");
 
   await apiClient.deleteKeychainEntryV1({

@@ -746,7 +746,7 @@
                 "content": {
                     "application/json": {
                         "schema": {
-                            "$ref": "#/components/schemas/HasKeychainEntryResponseV1"
+                            "$ref": "#/components/schemas/HasKeychainEntryRequestV1"
                         }
                     }
                 }
