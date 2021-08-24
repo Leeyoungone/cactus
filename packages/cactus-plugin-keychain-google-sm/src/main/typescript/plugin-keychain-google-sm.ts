@@ -131,6 +131,8 @@ export class PluginKeychainGoogleSm
   }
 
   public getPackageName(): string {
+    // FIXME: the package name is incorrect
+    // TODO: Add custom validation to the CI so that this does not happen
     return `@hyperledger/cactus-plugin-keychain-vault`;
   }
 
