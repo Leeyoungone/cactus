@@ -3,6 +3,7 @@ import express from "express";
 import bodyParser from "body-parser";
 import http from "http";
 import { AddressInfo } from "net";
+import { StatusCodes } from "http-status-codes";
 
 import { IListenOptions, Servers } from "@hyperledger/cactus-common";
 
@@ -114,9 +115,7 @@ test("get,set,has,delete alters state as expected", async (t: Test) => {
 
   t.ok(res1.status >= 200, "res1 status >= 200 OK");
   t.ok(res1.status < 300, "res1 status < 300 OK");
-  t.equal(res1.data.key, "equal res1.data.key, key OK"); //here is where it is
-  console.log("==================================================");
-  console.log(res1);
+  t.notOk(res1.data, "res1.data falsy, OK");
 
   const res2 = await apiClient.hasKeychainEntryV1({
     key: key,
@@ -127,8 +126,6 @@ test("get,set,has,delete alters state as expected", async (t: Test) => {
   // this does not compile just yet because the openapi.json also needs to be
   // fixed (and then the code rebuilt so that the code generator creates/updates)
   // the type definitions
-  console.log("wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww");
-  console.log(res2);
   t.true(res2.data.isPresent, "res2.data.isPresent === true OK");
 
   await apiClient.deleteKeychainEntryV1({
@@ -138,11 +135,23 @@ test("get,set,has,delete alters state as expected", async (t: Test) => {
   const hasAfterDelete1 = await plugin.has(key);
   t.false(hasAfterDelete1, "hasAfterDelete1 === false OK");
 
-  const valueAfterDelete1 = await plugin.get(key);
-  t.notok(valueAfterDelete1, "valueAfterDelete1 falsy OK");
+  //const res4 = apiClient.getKeychainEntryV1({ key });
+  //await t.rejects(res4, regExp, rejectMsg);
+  //add try catch code and then add what the error message should be -- because of the exception wrapping
 
-  // TODO: Also write the test assertions here to verify that the deletion has
-  // indeed disappeared the record as expected.
+  try {
+    apiClient.getKeychainEntryV1({ key });
+  } catch (out) {
+    t.ok(out, "error thrown for not found endpoint truthy OK");
+    t.ok(out.response, "deploy contract response truthy OK");
+    t.equal(
+      out.response.status,
+      StatusCodes.FORBIDDEN,
+      "deploy contract response status === 404 OK",
+    );
+    t.notok(out.response.data.data, "out.response.data.data falsy OK");
+    t.notok(out.response.data.success, "out.response.data.success falsy OK");
+  }
 
   t.end();
 });

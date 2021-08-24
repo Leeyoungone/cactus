@@ -90,11 +90,18 @@ export class GetKeychainEntryV1Endpoint implements IWebServiceEndpoint {
       const resBody = await this.options.connector.get(reqBody.key);
       res.json(resBody);
     } catch (ex) {
-      this.log.error(`Crash while serving ${reqTag}`, ex);
-      res.status(500).json({
-        message: "Internal Server Error",
-        error: ex?.stack || ex?.message,
-      });
+      if (ex.message.includes("secret not found")) {
+        res.status(404).json({
+          message: "Bad request",
+          error: ex?.stack || ex?.message,
+        });
+      } else {
+        this.log.error(`Crash while serving ${reqTag}`, ex);
+        res.status(500).json({
+          message: "Internal Server Error",
+          error: ex?.stack || ex?.message,
+        });
+      }
     }
   }
 }

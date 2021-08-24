@@ -87,8 +87,10 @@ export class HasKeychainEntryV1Endpoint implements IWebServiceEndpoint {
     this.log.debug(reqTag);
     const reqBody = req.body;
     try {
-      const resBody = await this.options.connector.has(reqBody.key);
-      res.json(resBody);
+      const key = reqBody.key;
+      const isPresent = await this.options.connector.has(reqBody.key);
+      const checkedAt = new Date().toJSON();
+      res.json({ key, isPresent, checkedAt });
     } catch (ex) {
       this.log.error(`Crash while serving ${reqTag}`, ex);
       res.status(500).json({
