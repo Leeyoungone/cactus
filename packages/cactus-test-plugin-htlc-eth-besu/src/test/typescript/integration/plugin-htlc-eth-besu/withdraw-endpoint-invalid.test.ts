@@ -221,7 +221,7 @@ test(testCase, async (t: Test) => {
 
     t.equal(res.status, 200, "response status is 200 OK");
   } catch (error) {
-    t.equal(error.response.status, 500, "response status is 500");
+    t.equal((error as any).response.status, 500, "response status is 500");
   }
   t.end();
 });

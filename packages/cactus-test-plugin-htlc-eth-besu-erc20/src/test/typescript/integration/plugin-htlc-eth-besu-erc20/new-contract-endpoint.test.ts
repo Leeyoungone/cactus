@@ -403,7 +403,7 @@ test("Test new invalid contract with 0 inputAmount token for HTLC", async (t: Te
     const res = await api.newContractV1(request);
     t.equal(res.status, 400, "response status is 400");
   } catch (error) {
-    t.equal(error.response.status, 400, "response status is 400");
+    t.equal((error as any).response.status, 400, "response status is 400");
   }
   t.end();
 });

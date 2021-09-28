@@ -272,7 +272,9 @@ export class QuorumTestLedger implements ITestLedger {
       } catch (ex) {
         reachable = false;
         if (Date.now() >= startedAt + timeoutMs) {
-          throw new Error(`${fnTag} timed out (${timeoutMs}ms) -> ${ex.stack}`);
+          throw new Error(
+            `${fnTag} timed out (${timeoutMs}ms) -> ${(ex as Error).stack}`,
+          );
         }
       }
       await new Promise((resolve2) => setTimeout(resolve2, 100));

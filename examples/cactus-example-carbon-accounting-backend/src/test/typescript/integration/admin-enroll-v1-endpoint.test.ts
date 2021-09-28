@@ -157,14 +157,17 @@ test(testCase, async (t: Test) => {
     t.fail("enroll admin response status === 403 FAIL");
   } catch (out) {
     t.ok(out, "error thrown for forbidden endpoint truthy OK");
-    t.ok(out.response, "enroll admin response truthy OK");
+    t.ok((out as any).response, "enroll admin response truthy OK");
     t.equal(
-      out.response.status,
+      (out as any).response.status,
       StatusCodes.FORBIDDEN,
       "enroll admin response status === 403 OK",
     );
-    t.notok(out.response.data.data, "out.response.data.data falsy OK");
-    t.notok(out.response.data.success, "out.response.data.success falsy OK");
+    t.notok((out as any).response.data.data, "out.response.data.data falsy OK");
+    t.notok(
+      (out as any).response.data.success,
+      "out.response.data.success falsy OK",
+    );
   }
 
   t.end();

@@ -87,7 +87,7 @@ export class RefundEndpoint implements IWebServiceEndpoint {
       this.log.error(`${fnTag} failed to serve request`, ex);
       res.status(400).json({
         message: "Bad request",
-        error: ex?.stack || ex?.message,
+        error: (ex as Error)?.stack || (ex as Error)?.message,
       });
     }
   }

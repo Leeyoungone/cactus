@@ -156,12 +156,17 @@ export class PluginObjectStoreIpfs implements IPluginObjectStore {
       this.log.debug(`StatResult for ${req.key}: %o`, statResult);
       return { key: req.key, checkedAt, isPresent: true };
     } catch (ex) {
-      if (ex?.stack?.includes(K_IPFS_JS_HTTP_ERROR_FILE_DOES_NOT_EXIST)) {
+      if (
+        (ex as Error)?.stack?.includes(K_IPFS_JS_HTTP_ERROR_FILE_DOES_NOT_EXIST)
+      ) {
         const msg = `Stat ${req.key} failed with error message containing phrase "${K_IPFS_JS_HTTP_ERROR_FILE_DOES_NOT_EXIST}" Returning isPresent=false ...`;
         this.log.debug(msg);
         return { key: req.key, checkedAt, isPresent: false };
       } else {
-        throw new RuntimeError(`Checking presence of ${req.key} crashed:`, ex);
+        throw new RuntimeError(
+          `Checking presence of ${req.key} crashed:`,
+          ex as Error,
+        );
       }
     }
   }
@@ -176,7 +181,10 @@ export class PluginObjectStoreIpfs implements IPluginObjectStore {
         parents: true,
       });
     } catch (ex) {
-      throw new RuntimeError(`Can't set object ${keyPath}. Write failed:`, ex);
+      throw new RuntimeError(
+        `Can't set object ${keyPath}. Write failed:`,
+        ex as Error,
+      );
     }
     return {
       key: req.key,

@@ -241,7 +241,7 @@ export class PluginLedgerConnectorIroha
           });
           return { transactionReceipt: response };
         } catch (err) {
-          throw new RuntimeError(err);
+          throw new RuntimeError(err as string);
         }
       }
       case IrohaCommand.SetAccountDetail: {
@@ -253,7 +253,7 @@ export class PluginLedgerConnectorIroha
           });
           return { transactionReceipt: response };
         } catch (err) {
-          throw new RuntimeError(err);
+          throw new RuntimeError(err as string);
         }
       }
       case IrohaCommand.CompareAndSetAccountDetail: {
@@ -269,7 +269,7 @@ export class PluginLedgerConnectorIroha
           );
           return { transactionReceipt: response };
         } catch (err) {
-          throw new RuntimeError(err);
+          throw new RuntimeError(err as string);
         }
       }
       case IrohaCommand.CreateAsset: {
@@ -282,7 +282,7 @@ export class PluginLedgerConnectorIroha
             });
           return { transactionReceipt: response };
         } catch (err) {
-          throw new RuntimeError(err);
+          throw new RuntimeError(err as string);
         }
       }
       case IrohaCommand.CreateDomain: {
@@ -293,7 +293,7 @@ export class PluginLedgerConnectorIroha
           });
           return { transactionReceipt: response };
         } catch (err) {
-          throw new RuntimeError(err);
+          throw new RuntimeError(err as string);
         }
       }
       case IrohaCommand.SetAccountQuorum: {
@@ -304,7 +304,7 @@ export class PluginLedgerConnectorIroha
           });
           return { transactionReceipt: response };
         } catch (err) {
-          throw new RuntimeError(err);
+          throw new RuntimeError(err as string);
         }
       }
       case IrohaCommand.AddAssetQuantity: {
@@ -315,7 +315,7 @@ export class PluginLedgerConnectorIroha
           });
           return { transactionReceipt: response };
         } catch (err) {
-          throw new RuntimeError(err);
+          throw new RuntimeError(err as string);
         }
       }
       case IrohaCommand.SubtractAssetQuantity: {
@@ -329,7 +329,7 @@ export class PluginLedgerConnectorIroha
           );
           return { transactionReceipt: response };
         } catch (err) {
-          throw new RuntimeError(err);
+          throw new RuntimeError(err as string);
         }
       }
       case IrohaCommand.TransferAsset: {
@@ -343,7 +343,7 @@ export class PluginLedgerConnectorIroha
           });
           return { transactionReceipt: response };
         } catch (err) {
-          throw new RuntimeError(err);
+          throw new RuntimeError(err as string);
         }
       }
       case IrohaQuery.GetSignatories: {
@@ -353,7 +353,7 @@ export class PluginLedgerConnectorIroha
           });
           return { transactionReceipt: queryRes };
         } catch (err) {
-          throw new RuntimeError(err);
+          throw new RuntimeError(err as string);
         }
       }
       case IrohaQuery.GetAccount: {
@@ -363,7 +363,7 @@ export class PluginLedgerConnectorIroha
           });
           return { transactionReceipt: queryRes };
         } catch (err) {
-          throw new RuntimeError(err);
+          throw new RuntimeError(err as string);
         }
       }
       case IrohaQuery.GetAccountDetail: {
@@ -378,7 +378,7 @@ export class PluginLedgerConnectorIroha
           });
           return { transactionReceipt: queryRes };
         } catch (err) {
-          throw new RuntimeError(err);
+          throw new RuntimeError(err as string);
         }
       }
       case IrohaQuery.GetAssetInfo: {
@@ -388,7 +388,7 @@ export class PluginLedgerConnectorIroha
           });
           return { transactionReceipt: queryRes };
         } catch (err) {
-          throw new RuntimeError(err);
+          throw new RuntimeError(err as string);
         }
       }
       case IrohaQuery.GetAccountAssets: {
@@ -400,7 +400,7 @@ export class PluginLedgerConnectorIroha
           });
           return { transactionReceipt: queryRes };
         } catch (err) {
-          throw new RuntimeError(err);
+          throw new RuntimeError(err as string);
         }
       }
       case IrohaCommand.AddSignatory: {
@@ -411,7 +411,7 @@ export class PluginLedgerConnectorIroha
           });
           return { transactionReceipt: response };
         } catch (err) {
-          throw new RuntimeError(err);
+          throw new RuntimeError(err as string);
         }
       }
       case IrohaCommand.RemoveSignatory: {
@@ -422,7 +422,7 @@ export class PluginLedgerConnectorIroha
           });
           return { transactionReceipt: response };
         } catch (err) {
-          throw new RuntimeError(err);
+          throw new RuntimeError(err as string);
         }
       }
       case IrohaQuery.GetRoles: {
@@ -430,7 +430,7 @@ export class PluginLedgerConnectorIroha
           const response = await queries.getRoles(queryOptions);
           return { transactionReceipt: response };
         } catch (err) {
-          throw new RuntimeError(err);
+          throw new RuntimeError(err as string);
         }
       }
       case IrohaCommand.CreateRole: {
@@ -441,7 +441,7 @@ export class PluginLedgerConnectorIroha
           });
           return { transactionReceipt: response };
         } catch (err) {
-          throw new RuntimeError(err);
+          throw new RuntimeError(err as string);
         }
       }
       case IrohaCommand.AppendRole: {
@@ -452,7 +452,7 @@ export class PluginLedgerConnectorIroha
           });
           return { transactionReceipt: response };
         } catch (err) {
-          throw new RuntimeError(err);
+          throw new RuntimeError(err as string);
         }
       }
       case IrohaCommand.DetachRole: {
@@ -463,7 +463,7 @@ export class PluginLedgerConnectorIroha
           });
           return { transactionReceipt: response };
         } catch (err) {
-          throw new RuntimeError(err);
+          throw new RuntimeError(err as string);
         }
       }
       case IrohaQuery.GetRolePermissions: {
@@ -473,7 +473,7 @@ export class PluginLedgerConnectorIroha
           });
           return { transactionReceipt: response };
         } catch (err) {
-          throw new RuntimeError(err);
+          throw new RuntimeError(err as string);
         }
       }
       case IrohaCommand.GrantPermission: {
@@ -485,7 +485,7 @@ export class PluginLedgerConnectorIroha
           });
           return { transactionReceipt: response };
         } catch (err) {
-          throw new RuntimeError(err);
+          throw new RuntimeError(err as string);
         }
       }
       case IrohaCommand.RevokePermission: {
@@ -497,7 +497,7 @@ export class PluginLedgerConnectorIroha
           });
           return { transactionReceipt: response };
         } catch (err) {
-          throw new RuntimeError(err);
+          throw new RuntimeError(err as string);
         }
       }
       case IrohaCommand.SetSettingValue: {
@@ -510,7 +510,7 @@ export class PluginLedgerConnectorIroha
           });
           return { transactionReceipt: response };
         } catch (err) {
-          throw new RuntimeError(err);
+          throw new RuntimeError(err as string);
         }
       }
       case IrohaQuery.GetPendingTransactions: {
@@ -521,7 +521,7 @@ export class PluginLedgerConnectorIroha
           });
           return { transactionReceipt: response };
         } catch (err) {
-          throw new RuntimeError(err);
+          throw new RuntimeError(err as string);
         }
       }
       case IrohaQuery.GetAccountTransactions: {
@@ -533,7 +533,7 @@ export class PluginLedgerConnectorIroha
           });
           return { transactionReceipt: response };
         } catch (err) {
-          throw new RuntimeError(err);
+          throw new RuntimeError(err as string);
         }
       }
       case IrohaQuery.GetAccountAssetTransactions: {
@@ -549,7 +549,7 @@ export class PluginLedgerConnectorIroha
           );
           return { transactionReceipt: response };
         } catch (err) {
-          throw new RuntimeError(err);
+          throw new RuntimeError(err as string);
         }
       }
       case IrohaQuery.GetBlock: {
@@ -559,7 +559,7 @@ export class PluginLedgerConnectorIroha
           });
           return { transactionReceipt: response };
         } catch (err) {
-          throw new RuntimeError(err);
+          throw new RuntimeError(err as string);
         }
       }
       case IrohaCommand.CallEngine: {
@@ -572,7 +572,7 @@ export class PluginLedgerConnectorIroha
           });
           return { transactionReceipt: response };
         } catch (err) {
-          throw new RuntimeError(err);
+          throw new RuntimeError(err as string);
         }
       }
       case IrohaQuery.GetEngineReceipts: {
@@ -582,7 +582,7 @@ export class PluginLedgerConnectorIroha
           });
           return { transactionReceipt: response };
         } catch (err) {
-          throw new RuntimeError(err);
+          throw new RuntimeError(err as string);
         }
       }
       case IrohaQuery.FetchCommits: {
@@ -590,7 +590,7 @@ export class PluginLedgerConnectorIroha
           const response = await queries.fetchCommits(queryOptions);
           return { transactionReceipt: response };
         } catch (err) {
-          throw new RuntimeError(err);
+          throw new RuntimeError(err as string);
         }
       }
       case IrohaCommand.AddPeer: {
@@ -601,7 +601,7 @@ export class PluginLedgerConnectorIroha
           });
           return { transactionReceipt: response };
         } catch (err) {
-          throw new RuntimeError(err);
+          throw new RuntimeError(err as string);
         }
       }
       case IrohaCommand.RemovePeer: {
@@ -611,7 +611,7 @@ export class PluginLedgerConnectorIroha
           });
           return { transactionReceipt: response };
         } catch (err) {
-          throw new RuntimeError(err);
+          throw new RuntimeError(err as string);
         }
       }
       case IrohaQuery.GetPeers: {
@@ -619,7 +619,7 @@ export class PluginLedgerConnectorIroha
           const response = await queries.getPeers(queryOptions);
           return { transactionReceipt: response };
         } catch (err) {
-          throw new RuntimeError(err);
+          throw new RuntimeError(err as string);
         }
       }
       default: {

@@ -116,9 +116,11 @@ test("Can report error if docker daemon is not accessable", async (t: Test) => {
     t.fail("Containers.getDiagnostics was supposed to fail but did not.");
   } catch (ex) {
     t.ok(ex, "exception thrown is truthy OK");
-    t.ok(ex.cause, "ex.cause truthy OK");
-    t.ok(ex.cause.message, "ex.cause.message truthy OK");
-    const causeMsgIsInformative = ex.cause.message.includes(badSocketPath);
+    t.ok((ex as any).cause, "ex.cause truthy OK");
+    t.ok((ex as any).cause.message, "ex.cause.message truthy OK");
+    const causeMsgIsInformative = (ex as any).cause.message.includes(
+      badSocketPath,
+    );
     t.true(causeMsgIsInformative, "causeMsgIsInformative");
   }
   t.end();

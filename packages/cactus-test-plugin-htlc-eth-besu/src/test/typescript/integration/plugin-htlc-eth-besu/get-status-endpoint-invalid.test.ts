@@ -229,7 +229,7 @@ test(testCase, async (t: Test) => {
     });
     t.equal(res.status, 500, "response status is 500");
   } catch (e) {
-    t.equal(e.response.status, 500);
+    t.equal((e as any).response.status, 500);
   }
   t.end();
 });

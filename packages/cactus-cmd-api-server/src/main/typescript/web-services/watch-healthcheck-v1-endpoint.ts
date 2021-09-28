@@ -53,7 +53,7 @@ export class WatchHealthcheckV1Endpoint {
         socket.emit(WatchHealthcheckV1.Next, next);
       } catch (ex) {
         log.error(`Failed to construct health check response:`, ex);
-        socket.emit(WatchHealthcheckV1.Error, ex);
+        socket.emit(WatchHealthcheckV1.Error, ex as Error);
         clearInterval(timerId);
       }
     }, 1000);

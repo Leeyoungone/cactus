@@ -133,9 +133,9 @@ export class DeployContractJarsEndpoint implements IWebServiceEndpoint {
       this.log.error(`${fnTag} failed to serve request`, ex);
       res.status(500);
       res.json({
-        error: ex?.message,
+        error: (ex as Error)?.message,
         // FIXME do not include stack trace
-        errorStack: ex?.stack,
+        errorStack: (ex as Error)?.stack,
       });
     }
   }

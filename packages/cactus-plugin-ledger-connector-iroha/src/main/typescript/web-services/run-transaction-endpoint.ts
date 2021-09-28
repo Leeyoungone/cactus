@@ -103,7 +103,7 @@ export class RunTransactionEndpoint implements IWebServiceEndpoint {
        * "Error: Error: Command response error: expected=COMMITTED, actual=REJECTED"
        * @see https://iroha.readthedocs.io/en/main/develop/api/commands.html?highlight=CallEngine#id18
        */
-      if (ex.message.includes("Error: Command response error")) {
+      if ((ex as Error).message.includes("Error: Command response error")) {
         this.log.debug("Sending back HTTP400 Bad Request error.");
         res.status(400);
         res.json(ex);
@@ -112,7 +112,7 @@ export class RunTransactionEndpoint implements IWebServiceEndpoint {
       this.log.error(`Crash while serving ${reqTag}`, ex);
       res.status(500).json({
         message: "Internal Server Error",
-        error: ex?.stack || ex?.message,
+        error: (ex as Error)?.stack || (ex as Error)?.message,
       });
     }
   }

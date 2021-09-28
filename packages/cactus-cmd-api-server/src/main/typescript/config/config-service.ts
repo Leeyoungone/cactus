@@ -624,7 +624,9 @@ export class ConfigService {
     try {
       JWS.verify(jws, keyPair);
     } catch (ex) {
-      throw new Error(`${fnTag} Invalid key pair PEM: ${ex && ex.stack}`);
+      throw new Error(
+        `${fnTag} Invalid key pair PEM: ${ex && (ex as Error).stack}`,
+      );
     }
   }
 }

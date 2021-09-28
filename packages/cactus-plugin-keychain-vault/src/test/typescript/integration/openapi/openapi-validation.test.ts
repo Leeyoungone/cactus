@@ -144,11 +144,11 @@ test(`${testCase}`, async (t: Test) => {
       } as any) as SetKeychainEntryRequest);
     } catch (e) {
       t2.equal(
-        e.response.status,
+        (e as any).response.status,
         400,
         `Endpoint ${fSet} without required key: response.status === 400 OK`,
       );
-      const fields = e.response.data.map((param: any) =>
+      const fields = (e as any).response.data.map((param: any) =>
         param.path.replace(".body.", ""),
       );
       t2.ok(fields.includes("key"), "Rejected because key is required");
@@ -163,11 +163,11 @@ test(`${testCase}`, async (t: Test) => {
       );
     } catch (e) {
       t2.equal(
-        e.response.status,
+        (e as any).response.status,
         400,
         `Endpoint ${fHas} without required key: response.status === 400 OK`,
       );
-      const fields = e.response.data.map((param: any) =>
+      const fields = (e as any).response.data.map((param: any) =>
         param.path.replace(".body.", ""),
       );
       t2.ok(fields.includes("key"), "Rejected because key is required");
@@ -182,11 +182,11 @@ test(`${testCase}`, async (t: Test) => {
       );
     } catch (e) {
       t2.equal(
-        e.response.status,
+        (e as any).response.status,
         400,
         `Endpoint ${fGet} without required key: response.status === 400 OK`,
       );
-      const fields = e.response.data.map((param: any) =>
+      const fields = (e as any).response.data.map((param: any) =>
         param.path.replace(".body.", ""),
       );
       t2.ok(fields.includes("key"), "Rejected because key is required");
@@ -201,11 +201,11 @@ test(`${testCase}`, async (t: Test) => {
       );
     } catch (e) {
       t2.equal(
-        e.response.status,
+        (e as any).response.status,
         400,
         `Endpoint ${fDelete} without required key: response.status === 400 OK`,
       );
-      const fields = e.response.data.map((param: any) =>
+      const fields = (e as any).response.data.map((param: any) =>
         param.path.replace(".body.", ""),
       );
       t2.ok(fields.includes("key"), "Rejected because key is required");
@@ -222,11 +222,11 @@ test(`${testCase}`, async (t: Test) => {
       } as any) as SetKeychainEntryRequest);
     } catch (e) {
       t2.equal(
-        e.response.status,
+        (e as any).response.status,
         400,
         `Endpoint ${fSet} with fake=4: response.status === 400 OK`,
       );
-      const fields = e.response.data.map((param: any) =>
+      const fields = (e as any).response.data.map((param: any) =>
         param.path.replace(".body.", ""),
       );
       t2.ok(
@@ -245,11 +245,11 @@ test(`${testCase}`, async (t: Test) => {
       } as any) as HasKeychainEntryRequestV1);
     } catch (e) {
       t2.equal(
-        e.response.status,
+        (e as any).response.status,
         400,
         `Endpoint ${fHas} with fake=4: response.status === 400 OK`,
       );
-      const fields = e.response.data.map((param: any) =>
+      const fields = (e as any).response.data.map((param: any) =>
         param.path.replace(".body.", ""),
       );
       t2.ok(
@@ -268,11 +268,11 @@ test(`${testCase}`, async (t: Test) => {
       } as any) as GetKeychainEntryRequest);
     } catch (e) {
       t2.equal(
-        e.response.status,
+        (e as any).response.status,
         400,
         `Endpoint ${fGet} with fake=4: response.status === 400 OK`,
       );
-      const fields = e.response.data.map((param: any) =>
+      const fields = (e as any).response.data.map((param: any) =>
         param.path.replace(".body.", ""),
       );
       t2.ok(
@@ -291,11 +291,11 @@ test(`${testCase}`, async (t: Test) => {
       } as any) as GetKeychainEntryRequest);
     } catch (e) {
       t2.equal(
-        e.response.status,
+        (e as any).response.status,
         400,
         `Endpoint ${fDelete} with fake=4: response.status === 400 OK`,
       );
-      const fields = e.response.data.map((param: any) =>
+      const fields = (e as any).response.data.map((param: any) =>
         param.path.replace(".body.", ""),
       );
       t2.ok(

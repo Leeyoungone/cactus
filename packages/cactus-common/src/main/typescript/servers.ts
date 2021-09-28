@@ -90,7 +90,7 @@ export class Servers {
         return server;
       } catch (ex) {
         // if something else went wrong we still want to just give up
-        if (!ex.message.includes("EADDRINUSE")) {
+        if (ex instanceof Error && !ex.message.includes("EADDRINUSE")) {
           throw ex;
         }
       }

@@ -171,11 +171,11 @@ test(testCase, async (t: Test) => {
       );
     } catch (e) {
       t2.equal(
-        e.response.status,
+        (e as any).response.status,
         400,
         `Endpoint ${fDeploy} without required keychainId: response.status === 400 OK`,
       );
-      const fields = e.response.data.map((param: any) =>
+      const fields = (e as any).response.data.map((param: any) =>
         param.path.replace(".body.", ""),
       );
       t2.ok(
@@ -208,11 +208,11 @@ test(testCase, async (t: Test) => {
       );
     } catch (e) {
       t2.equal(
-        e.response.status,
+        (e as any).response.status,
         400,
         `Endpoint ${fDeploy} with fake=4: response.status === 400 OK`,
       );
-      const fields = e.response.data.map((param: any) =>
+      const fields = (e as any).response.data.map((param: any) =>
         param.path.replace(".body.", ""),
       );
       t2.ok(
@@ -267,11 +267,11 @@ test(testCase, async (t: Test) => {
       );
     } catch (e) {
       t2.equal(
-        e.response.status,
+        (e as any).response.status,
         400,
         `Endpoint ${fInvoke} without required contractName: response.status === 400 OK`,
       );
-      const fields = e.response.data.map((param: any) =>
+      const fields = (e as any).response.data.map((param: any) =>
         param.path.replace(".body.", ""),
       );
       t2.ok(
@@ -303,11 +303,11 @@ test(testCase, async (t: Test) => {
       );
     } catch (e) {
       t2.equal(
-        e.response.status,
+        (e as any).response.status,
         400,
         `Endpoint ${fInvoke} with fake=4: response.status === 400 OK`,
       );
-      const fields = e.response.data.map((param: any) =>
+      const fields = (e as any).response.data.map((param: any) =>
         param.path.replace(".body.", ""),
       );
       t2.ok(
@@ -366,11 +366,11 @@ test(testCase, async (t: Test) => {
       );
     } catch (e) {
       t2.equal(
-        e.response.status,
+        (e as any).response.status,
         400,
         `Endpoint ${fRun} without required consistencyStrategy: response.status === 400 OK`,
       );
-      const fields = e.response.data.map((param: any) =>
+      const fields = (e as any).response.data.map((param: any) =>
         param.path.replace(".body.", ""),
       );
       t2.ok(
@@ -408,11 +408,11 @@ test(testCase, async (t: Test) => {
       );
     } catch (e) {
       t2.equal(
-        e.response.status,
+        (e as any).response.status,
         400,
         `Endpoint ${fRun} with fake=4: response.status === 400 OK`,
       );
-      const fields = e.response.data.map((param: any) =>
+      const fields = (e as any).response.data.map((param: any) =>
         param.path.replace(".body.", ""),
       );
       t2.ok(

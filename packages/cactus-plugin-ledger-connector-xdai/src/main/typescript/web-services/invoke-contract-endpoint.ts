@@ -92,7 +92,7 @@ export class InvokeContractEndpoint implements IWebServiceEndpoint {
       this.log.error(`Crash while serving ${reqTag}`, ex);
       res.status(500).json({
         message: "Internal Server Error",
-        error: ex?.stack || ex?.message,
+        error: (ex as Error)?.stack || (ex as Error)?.message,
       });
     }
   }

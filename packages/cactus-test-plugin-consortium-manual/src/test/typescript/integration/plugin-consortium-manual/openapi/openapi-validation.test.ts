@@ -283,11 +283,11 @@ test(testCase, async (t: Test) => {
       await api.getNodeJwsV1({ fake: 4 });
     } catch (e) {
       t2.equal(
-        e.response.status,
+        (e as any).response.status,
         400,
         `Endpoint ${fGetNodeJwt} with fake=4: response.status === 400 OK`,
       );
-      const fields = e.response.data.map((param: any) =>
+      const fields = (e as any).response.data.map((param: any) =>
         param.path.replace(".body.", ""),
       );
       t2.ok(
@@ -306,11 +306,11 @@ test(testCase, async (t: Test) => {
       await api.getConsortiumJwsV1({ fake: 4 });
     } catch (e) {
       t2.equal(
-        e.response.status,
+        (e as any).response.status,
         400,
         `Endpoint ${fGetConsortiumJws} with fake=4: response.status === 400 OK`,
       );
-      const fields = e.response.data.map((param: any) =>
+      const fields = (e as any).response.data.map((param: any) =>
         param.path.replace(".body.", ""),
       );
       t2.ok(

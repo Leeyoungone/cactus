@@ -229,7 +229,7 @@ export class PluginKeychainVault implements IPluginWebService, IPluginKeychain {
       }
     } catch (ex) {
       // FIXME: Throw if not found, detect it in the endpoint code, status=404
-      if (ex?.response?.statusCode === HttpStatus.NOT_FOUND) {
+      if ((ex as any)?.response?.statusCode === HttpStatus.NOT_FOUND) {
         return (null as unknown) as string;
       } else {
         this.log.error(`Retrieval of "${key}" crashed:`, ex);
@@ -256,7 +256,7 @@ export class PluginKeychainVault implements IPluginWebService, IPluginKeychain {
       // else being an unexpected exception that we do not want to
       // handle nor suppress under any circumstances since doing so
       // would lead to silent failures or worse.
-      if (ex?.response?.statusCode === HttpStatus.NOT_FOUND) {
+      if ((ex as any)?.response?.statusCode === HttpStatus.NOT_FOUND) {
         return false;
       } else {
         this.log.error(`Presence check of "${key}" crashed:`, ex);

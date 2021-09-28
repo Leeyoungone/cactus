@@ -98,8 +98,8 @@ export class DeployContractEndpointV1 implements IWebServiceEndpoint {
     } catch (ex) {
       this.log.error(`${fnTag} failed to serve contract deploy request`, ex);
       res.status(HttpStatus.INTERNAL_SERVER_ERROR);
-      res.statusMessage = ex.message;
-      res.json({ error: ex.stack });
+      res.statusMessage = (ex as Error).message;
+      res.json({ error: (ex as Error).stack });
     }
   }
 }

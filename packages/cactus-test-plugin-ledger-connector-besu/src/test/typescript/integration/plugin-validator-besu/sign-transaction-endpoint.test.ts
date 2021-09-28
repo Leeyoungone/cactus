@@ -186,9 +186,13 @@ test(testCase, async (t: Test) => {
     };
     await api.signTransactionV1(notFoundRequest);
   } catch (error) {
-    t.equal(error.response.status, 404, "HTTP response status are equal");
     t.equal(
-      error.response.statusText,
+      (error as any).response.status,
+      404,
+      "HTTP response status are equal",
+    );
+    t.equal(
+      (error as any).response.statusText,
       "Transaction not found",
       "Response text are equal",
     );

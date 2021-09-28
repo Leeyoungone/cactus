@@ -504,7 +504,7 @@ test("Test invalid withdraw with invalid id", async (t: Test) => {
     const resWithdraw = await api.withdrawV1(withdrawRequest);
     t.equal(resWithdraw.status, 400, "response status is 400");
   } catch (error) {
-    t.equal(error.response.status, 400, "response status is 400");
+    t.equal((error as any).response.status, 400, "response status is 400");
   }
   t.comment("Get balance of receiver account");
   const responseFinalBalance = await connector.invokeContract({

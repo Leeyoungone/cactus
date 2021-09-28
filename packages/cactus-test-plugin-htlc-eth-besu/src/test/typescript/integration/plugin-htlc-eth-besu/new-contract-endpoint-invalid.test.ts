@@ -191,7 +191,7 @@ test(testCase, async (t: Test) => {
     t.ok(resp, "response newContract is OK");
     t.equal(resp.status, 200, "response status newContract is OK");
   } catch (error) {
-    t.equal(error.response.status, 500, "response status is 500");
+    t.equal((error as any).response.status, 500, "response status is 500");
   }
   t.end();
 });

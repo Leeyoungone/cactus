@@ -110,8 +110,8 @@ export class GetConsortiumEndpointV1 implements IWebServiceEndpoint {
     } catch (ex) {
       this.log.error(`${fnTag} failed to serve request`, ex);
       res.status(500);
-      res.statusMessage = ex.message;
-      res.json({ error: ex.stack });
+      res.statusMessage = (ex as Error).message;
+      res.json({ error: (ex as Error).stack });
     }
   }
 }

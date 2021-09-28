@@ -216,7 +216,7 @@ export class ApiServer {
 
       return { addressInfoCockpit, addressInfoApi, addressInfoGrpc };
     } catch (ex) {
-      const errorMessage = `Failed to start ApiServer: ${ex.stack}`;
+      const errorMessage = `Failed to start ApiServer: ${(ex as Error).stack}`;
       this.log.error(errorMessage);
       this.log.error(`Attempting shutdown...`);
       try {
@@ -336,7 +336,7 @@ export class ApiServer {
     } catch (ex) {
       const errorMessage =
         "Could not create plugin installation directory, check the file-system permissions.";
-      throw new RuntimeError(errorMessage, ex);
+      throw new RuntimeError(errorMessage, ex as Error);
     }
     try {
       lmify.setPackageManager("npm");
@@ -359,7 +359,10 @@ export class ApiServer {
       }
       this.log.info(`Installed ${pkgName} OK`);
     } catch (ex) {
-      throw new RuntimeError(`${fnTag} plugin install fail: ${pkgName}`, ex);
+      throw new RuntimeError(
+        `${fnTag} plugin install fail: ${pkgName}`,
+        ex as Error,
+      );
     }
   }
 

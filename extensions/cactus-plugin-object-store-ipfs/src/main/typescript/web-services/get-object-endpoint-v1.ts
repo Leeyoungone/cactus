@@ -94,7 +94,7 @@ export class GetObjectEndpointV1 implements IWebServiceEndpoint {
     } catch (ex) {
       this.log.error(`${tag} Failed to serve request:`, ex);
       res.status(500);
-      res.json({ error: ex.stack });
+      res.json({ error: (ex as Error).stack });
     }
   }
 }

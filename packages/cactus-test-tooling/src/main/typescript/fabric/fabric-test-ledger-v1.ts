@@ -137,7 +137,7 @@ export class FabricTestLedgerV1 implements ITestLedger {
       return new FabricCAServices(caUrl, tlsOptions, caName);
     } catch (ex) {
       this.log.error(`createCaClient() Failure:`, ex);
-      throw new Error(`${fnTag} Inner Exception: ${ex?.message}`);
+      throw new Error(`${fnTag} Inner Exception: ${(ex as Error)?.message}`);
     }
   }
 
@@ -198,7 +198,7 @@ export class FabricTestLedgerV1 implements ITestLedger {
       return [x509Identity, wallet];
     } catch (ex) {
       this.log.error(`enrollUser() Failure:`, ex);
-      throw new Error(`${fnTag} Exception: ${ex?.message}`);
+      throw new Error(`${fnTag} Exception: ${(ex as Error)?.message}`);
     }
   }
 
@@ -229,7 +229,7 @@ export class FabricTestLedgerV1 implements ITestLedger {
       return [x509Identity, wallet];
     } catch (ex) {
       this.log.error(`enrollAdmin() Failure:`, ex);
-      throw new Error(`${fnTag} Exception: ${ex?.message}`);
+      throw new Error(`${fnTag} Exception: ${(ex as Error)?.message}`);
     }
   }
 
@@ -472,7 +472,9 @@ export class FabricTestLedgerV1 implements ITestLedger {
       } catch (ex) {
         reachable = false;
         if (Date.now() >= startedAt + timeoutMs) {
-          throw new Error(`${fnTag} timed out (${timeoutMs}ms) -> ${ex.stack}`);
+          throw new Error(
+            `${fnTag} timed out (${timeoutMs}ms) -> ${(ex as Error).stack}`,
+          );
         }
       }
       await new Promise((resolve2) => setTimeout(resolve2, 1000));

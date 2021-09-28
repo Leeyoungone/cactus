@@ -32,7 +32,7 @@ export async function registerWebServiceEndpoint(
   } catch (ex) {
     throw new Error(
       `${fnTag} Express verb method ${httpVerb} threw ` +
-        ` while registering endpoint: ${ex.message}`,
+        ` while registering endpoint: ${(ex as Error).message}`,
     );
   }
 }

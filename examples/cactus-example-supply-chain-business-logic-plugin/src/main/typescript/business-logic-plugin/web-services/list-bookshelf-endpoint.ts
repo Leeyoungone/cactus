@@ -117,7 +117,7 @@ export class ListBookshelfEndpoint implements IWebServiceEndpoint {
     } catch (ex) {
       this.log.debug(`${tag} Failed to serve request:`, ex);
       res.status(500);
-      res.json({ error: ex.stack });
+      res.json({ error: (ex as Error).stack });
     }
   }
 }

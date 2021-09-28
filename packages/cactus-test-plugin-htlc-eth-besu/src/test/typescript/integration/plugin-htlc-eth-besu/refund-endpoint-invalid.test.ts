@@ -231,7 +231,7 @@ test(testCase, async (t: Test) => {
     const refundResponse = await api.refundV1(refundRequest);
     t.equal(refundResponse.status, 200);
   } catch (error) {
-    t.equal(error.response.status, 500, "response status is 500");
+    t.equal((error as any).response.status, 500, "response status is 500");
   }
   t.end();
 });

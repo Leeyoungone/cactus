@@ -104,7 +104,10 @@ export class Containers {
       return response;
     } catch (ex) {
       log.error("Failed to get diagnostics of Docker daemon", ex);
-      throw new RuntimeError("Failed to get diagnostics of Docker daemon", ex);
+      throw new RuntimeError(
+        "Failed to get diagnostics of Docker daemon",
+        ex as Error,
+      );
     }
   }
   /**
@@ -530,7 +533,9 @@ export class Containers {
         //   );
         // }
         if (Date.now() >= startedAt + timeoutMs) {
-          throw new Error(`${fnTag} timed out (${timeoutMs}ms) -> ${ex.stack}`);
+          throw new Error(
+            `${fnTag} timed out (${timeoutMs}ms) -> ${(ex as Error).stack}`,
+          );
         }
         reachable = false;
       }
