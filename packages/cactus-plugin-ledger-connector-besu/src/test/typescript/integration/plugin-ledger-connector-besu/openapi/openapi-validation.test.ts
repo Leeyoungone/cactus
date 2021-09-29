@@ -41,6 +41,7 @@ import { BesuApiClientOptions } from "../../../../../main/typescript/api-client/
 
 import { installOpenapiValidationMiddleware } from "@hyperledger/cactus-core";
 import OAS from "../../../../../main/json/openapi.json";
+import axios from "axios";
 
 const logLevel: LogLevelDesc = "TRACE";
 const testCase = "Besu API";
@@ -200,24 +201,28 @@ test(testCase, async (t: Test) => {
       await apiClient.deployContractSolBytecodeV1(
         (parameters as any) as DeployContractSolidityBytecodeV1Request,
       );
-    } catch (e) {
-      t2.equal(
-        e.response.status,
-        400,
-        `Endpoint ${fDeploy} without required contractName and bytecode: response.status === 400 OK`,
-      );
-      const fields = e.response.data.map((param: any) =>
-        param.path.replace(".body.", ""),
-      );
-      t2.ok(
-        fields.includes("contractName"),
-        "Rejected because contractName is required",
-      );
-      t2.ok(
-        fields.includes("bytecode"),
-        "Rejected because bytecode is required",
-      );
-      t2.notOk(fields.includes("gas"), "gas is not required");
+    } catch (e: unknown) {
+      if (axios.isAxiosError(e)) {
+        t2.equal(
+          e.response?.status,
+          400,
+          `Endpoint ${fDeploy} without required contractName and bytecode: response.status === 400 OK`,
+        );
+        const fields = e.response?.data.map((param: any) =>
+          param.path.replace(".body.", ""),
+        );
+        t2.ok(
+          fields.includes("contractName"),
+          "Rejected because contractName is required",
+        );
+        t2.ok(
+          fields.includes("bytecode"),
+          "Rejected because bytecode is required",
+        );
+        t2.notOk(fields.includes("gas"), "gas is not required");
+      } else {
+        t2.fail(JSON.stringify(e));
+      }
     }
 
     t2.end();
