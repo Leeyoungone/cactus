@@ -26,6 +26,7 @@ import {
 
 import OAS from "../../../json/openapi.json";
 import { InsertBambooHarvestRequest } from "../../generated/openapi/typescript-axios";
+import axios from "axios";
 
 export interface IInsertBambooHarvestEndpointOptions {
   logLevel?: LogLevelDesc;
@@ -127,9 +128,11 @@ export class InsertBambooHarvestEndpoint implements IWebServiceEndpoint {
       res.status(200);
       res.json(body);
     } catch (ex) {
-      this.log.debug(`${tag} Failed to serve request:`, ex);
-      res.status(500);
-      res.json({ error: (ex as Error).stack });
+      if (axios.isAxiosError(ex)) {
+        this.log.debug(`${tag} Failed to serve request:`, ex);
+        res.status(500);
+        res.json({ error: (ex as Error).stack });
+      }
     }
   }
 }

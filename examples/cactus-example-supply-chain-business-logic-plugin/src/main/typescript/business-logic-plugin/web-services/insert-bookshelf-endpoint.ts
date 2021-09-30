@@ -21,6 +21,7 @@ import {
 
 import OAS from "../../../json/openapi.json";
 import { InsertBookshelfRequest } from "../../generated/openapi/typescript-axios/index";
+import axios from "axios";
 
 export interface IInsertBookshelfEndpointOptions {
   logLevel?: LogLevelDesc;
@@ -115,9 +116,11 @@ export class InsertBookshelfEndpoint implements IWebServiceEndpoint {
       res.status(200);
       res.json(body);
     } catch (ex) {
-      this.log.debug(`${tag} Failed to serve request:`, ex);
-      res.status(500);
-      res.json({ error: (ex as Error).stack });
+      if (axios.isAxiosError(ex)) {
+        this.log.debug(`${tag} Failed to serve request:`, ex);
+        res.status(500);
+        res.json({ error: ex.stack });
+      }
     }
   }
 }

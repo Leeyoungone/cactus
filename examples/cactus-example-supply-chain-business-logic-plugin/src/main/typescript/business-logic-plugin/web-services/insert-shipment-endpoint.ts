@@ -21,6 +21,7 @@ import {
 } from "@hyperledger/cactus-plugin-ledger-connector-fabric";
 
 import OAS from "../../../json/openapi.json";
+import axios from "axios";
 
 export interface IInsertShipmentEndpointOptions {
   logLevel?: LogLevelDesc;
@@ -115,9 +116,11 @@ export class InsertShipmentEndpoint implements IWebServiceEndpoint {
       res.json(body);
       res.status(200);
     } catch (ex) {
-      this.log.debug(`${tag} Failed to serve request:`, ex);
-      res.status(500);
-      res.json({ error: (ex as Error).stack });
+      if (axios.isAxiosError(ex)) {
+        this.log.debug(`${tag} Failed to serve request:`, ex);
+        res.status(500);
+        res.json({ error: (ex as Error).stack });
+      }
     }
   }
 }

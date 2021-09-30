@@ -5,6 +5,7 @@ import expressJwt from "express-jwt";
 import { v4 as uuidv4 } from "uuid";
 import { JWK, JWT } from "jose";
 import { StatusCodes } from "http-status-codes";
+import axios from "axios";
 
 import {
   AuthorizationProtocol,
@@ -30,6 +31,7 @@ import {
   CarbonAccountingApp,
   ICarbonAccountingAppOptions,
 } from "../../../main/typescript/carbon-accounting-app";
+import { RuntimeError } from "run-time-error";
 
 const testCase = "can enroll new admin users onto the Fabric org";
 const logLevel: LogLevelDesc = "TRACE";
@@ -103,9 +105,11 @@ test(testCase, async (t: Test) => {
 
   try {
     await carbonAccountingApp.start();
-  } catch (ex) {
-    log.error(`CarbonAccountingApp crashed. failing test...`, ex);
-    throw ex;
+  } catch (ex: unknown) {
+    if (axios.isAxiosError(ex)) {
+      log.error(`CarbonAccountingApp crashed. failing test...`, ex);
+      throw ex;
+    }
   }
 
   const jwtPayload = {
@@ -155,19 +159,22 @@ test(testCase, async (t: Test) => {
   try {
     await apiClientBad.enrollAdminV1({ orgName: "does-not-matter" });
     t.fail("enroll admin response status === 403 FAIL");
-  } catch (out) {
-    t.ok(out, "error thrown for forbidden endpoint truthy OK");
-    t.ok((out as any).response, "enroll admin response truthy OK");
-    t.equal(
-      (out as any).response.status,
-      StatusCodes.FORBIDDEN,
-      "enroll admin response status === 403 OK",
-    );
-    t.notok((out as any).response.data.data, "out.response.data.data falsy OK");
-    t.notok(
-      (out as any).response.data.success,
-      "out.response.data.success falsy OK",
-    );
+  } catch (out: unknown) {
+    if (!out) {
+      const errorMessage = `out is falsy`;
+      throw new RuntimeError(errorMessage);
+    }
+    if (axios.isAxiosError(out)) {
+      t.ok(out, "error thrown for forbidden endpoint truthy OK");
+      t.ok(out.response, "enroll admin response truthy OK");
+      t.equal(
+        out.response?.status,
+        StatusCodes.FORBIDDEN,
+        "enroll admin response status === 403 OK",
+      );
+      t.notok(out.response?.data.data, "out.response.data.data falsy OK");
+      t.notok(out.response?.data.success, "out.response.data.success falsy OK");
+    }
   }
 
   t.end();

@@ -17,6 +17,7 @@ import { registerWebServiceEndpoint } from "@hyperledger/cactus-core";
 import { EnrollAdminV1Request } from "../../../generated/openapi/typescript-axios";
 import { CarbonAccountingPlugin } from "../../carbon-accounting-plugin";
 import OAS from "../../../../json/openapi.json";
+import axios from "axios";
 
 export interface IEnrollAdminV1EndpointOptions {
   logLevel?: LogLevelDesc;
@@ -76,9 +77,11 @@ export class EnrollAdminV1Endpoint implements IWebServiceEndpoint {
       res.status(200);
       res.json(resBody);
     } catch (ex) {
-      this.log.debug(`${tag} Failed to serve request:`, ex);
-      res.status(500);
-      res.json({ error: (ex as Error).stack });
+      if (axios.isAxiosError(ex)) {
+        this.log.debug(`${tag} Failed to serve request:`, ex);
+        res.status(500);
+        res.json({ error: ex.stack });
+      }
     }
   }
 }
