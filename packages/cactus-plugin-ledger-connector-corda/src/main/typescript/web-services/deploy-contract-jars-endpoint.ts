@@ -31,6 +31,8 @@ import {
 } from "../generated/openapi/typescript-axios/api";
 
 import OAS from "../../json/openapi.json";
+import axios from "axios";
+import { RuntimeError } from "run-time-error";
 
 export interface IDeployContractEndpointOptions {
   logLevel?: LogLevelDesc;
@@ -129,14 +131,23 @@ export class DeployContractJarsEndpoint implements IWebServiceEndpoint {
       const body = await this.doDeploy(req.body);
       res.status(200);
       res.json(body);
-    } catch (ex) {
-      this.log.error(`${fnTag} failed to serve request`, ex);
-      res.status(500);
-      res.json({
-        error: (ex as Error)?.message,
-        // FIXME do not include stack trace
-        errorStack: (ex as Error)?.stack,
-      });
+    } catch (ex: unknown) {
+      if (axios.isAxiosError(ex)) {
+        this.log.error(`${fnTag} failed to serve request`, ex);
+        res.status(500);
+        res.json({
+          error: ex.message,
+          // FIXME do not include stack trace
+          errorStack: ex.stack,
+        });
+      } else if (ex instanceof Error) {
+        throw new RuntimeError("unexpected exception", ex);
+      } else {
+        throw new RuntimeError(
+          "unexpected exception with incorrect type",
+          JSON.stringify(ex),
+        );
+      }
     }
   }
 
@@ -195,8 +206,17 @@ export class DeployContractJarsEndpoint implements IWebServiceEndpoint {
     try {
       const response = await ssh.execCommand(cmd);
       this.log.debug(`${fnTag} stopped Corda node OK `, response);
-    } catch (ex) {
-      this.log.error(`${fnTag} stopping of Corda node failed`, ex);
+    } catch (ex: unknown) {
+      if (axios.isAxiosError(ex)) {
+        this.log.error(`${fnTag} stopping of Corda node failed`, ex);
+      } else if (ex instanceof Error) {
+        throw new RuntimeError("unexpected exception", ex);
+      } else {
+        throw new RuntimeError(
+          "unexpected exception with incorrect type",
+          JSON.stringify(ex),
+        );
+      }
     }
   }
 
@@ -207,8 +227,17 @@ export class DeployContractJarsEndpoint implements IWebServiceEndpoint {
     try {
       const response = await ssh.execCommand(cmd);
       this.log.debug(`${fnTag} started Corda node OK `, response);
-    } catch (ex) {
-      this.log.error(`${fnTag} starting of Corda node failed`, ex);
+    } catch (ex: unknown) {
+      if (axios.isAxiosError(ex)) {
+        this.log.error(`${fnTag} starting of Corda node failed`, ex);
+      } else if (ex instanceof Error) {
+        throw new RuntimeError("unexpected exception", ex);
+      } else {
+        throw new RuntimeError(
+          "unexpected exception with incorrect type",
+          JSON.stringify(ex),
+        );
+      }
     }
   }
 }

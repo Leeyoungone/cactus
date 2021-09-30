@@ -14,6 +14,8 @@ import {
 } from "../../../main/typescript/public-api";
 
 import { PluginLedgerConnectorStub } from "../fixtures/plugin-ledger-connector-stub/plugin-ledger-connector-stub";
+import axios from "axios";
+import { RuntimeError } from "run-time-error";
 
 const testCase =
   "block unprotected endpoint if not confirmed by ops via deploy-time configuration";
@@ -75,9 +77,18 @@ test(testCase, async (t: Test) => {
       mainAssertion,
     );
     t.end();
-  } catch (ex) {
-    log.error(ex);
-    t.fail("Exception thrown during test execution, see above for details!");
-    throw ex;
+  } catch (ex: unknown) {
+    if (axios.isAxiosError(ex)) {
+      log.error(ex);
+      t.fail("Exception thrown during test execution, see above for details!");
+      throw ex;
+    } else if (ex instanceof Error) {
+      throw new RuntimeError("unexpected exception", ex);
+    } else {
+      throw new RuntimeError(
+        "unexpected exception with incorrect type",
+        JSON.stringify(ex),
+      );
+    }
   }
 });

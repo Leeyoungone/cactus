@@ -17,7 +17,6 @@ import { registerWebServiceEndpoint } from "@hyperledger/cactus-core";
 import { DaoTokenGetAllowanceRequest } from "../../../generated/openapi/typescript-axios";
 import { CarbonAccountingPlugin } from "../../carbon-accounting-plugin";
 import OAS from "../../../../json/openapi.json";
-import axios from "axios";
 
 export interface IGetAllowanceEndpointOptions {
   logLevel?: LogLevelDesc;
@@ -82,11 +81,14 @@ export class GetAllowanceEndpoint implements IWebServiceEndpoint {
       const resBody = await Promise.resolve("dummy-response-fixme");
       res.status(200);
       res.json(resBody);
-    } catch (ex) {
-      if (axios.isAxiosError(ex)) {
-        this.log.debug(`${tag} Failed to serve request:`, ex);
+    } catch (ex: unknown) {
+      this.log.debug(`${tag} Failed to serve request:`, ex);
+      if (ex instanceof Error) {
         res.status(500);
         res.json({ error: ex.stack });
+      } else {
+        res.status(500);
+        res.json({ error: JSON.stringify(ex) });
       }
     }
   }

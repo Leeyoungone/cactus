@@ -21,6 +21,8 @@ import {
   SAMPLE_CORDAPP_ROOT_DIRS,
 } from "./sample-cordapp-enum";
 import { ICordappJarFile } from "./cordapp-jar-file";
+import axios from "axios";
+import { RuntimeError } from "run-time-error";
 
 /*
  * Contains options for Corda container
@@ -195,8 +197,17 @@ export class CordaTestLedger implements ITestLedger {
             }
           } while (!isHealthy);
           resolve(container);
-        } catch (ex) {
-          reject(ex);
+        } catch (ex: unknown) {
+          if (axios.isAxiosError(ex)) {
+            reject(ex);
+          } else if (ex instanceof Error) {
+            throw new RuntimeError("unexpected exception", ex);
+          } else {
+            throw new RuntimeError(
+              "unexpected exception with incorrect type",
+              JSON.stringify(ex),
+            );
+          }
         }
       });
     });
@@ -293,9 +304,18 @@ export class CordaTestLedger implements ITestLedger {
     const ssh = new NodeSSH();
     try {
       await ssh.connect(sshConfig);
-    } catch (ex) {
-      this.log.error(`Failed to establish SSH connection to Corda node.`, ex);
-      throw ex;
+    } catch (ex: unknown) {
+      if (axios.isAxiosError(ex)) {
+        this.log.error(`Failed to establish SSH connection to Corda node.`, ex);
+        throw ex;
+      } else if (ex instanceof Error) {
+        throw new RuntimeError("unexpected exception", ex);
+      } else {
+        throw new RuntimeError(
+          "unexpected exception with incorrect type",
+          JSON.stringify(ex),
+        );
+      }
     }
 
     const cwd = SAMPLE_CORDAPP_ROOT_DIRS[sampleCordapp];

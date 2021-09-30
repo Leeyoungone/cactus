@@ -20,6 +20,8 @@ import { registerWebServiceEndpoint } from "@hyperledger/cactus-core";
 import { PluginLedgerConnectorFabric } from "../plugin-ledger-connector-fabric";
 import { DeployContractGoSourceV1Request } from "../generated/openapi/typescript-axios/index";
 import OAS from "../../json/openapi.json";
+import axios from "axios";
+import { RuntimeError } from "run-time-error";
 
 export interface IDeployContractGoSourceEndpointV1Options {
   logLevel?: LogLevelDesc;
@@ -95,11 +97,20 @@ export class DeployContractGoSourceEndpointV1 implements IWebServiceEndpoint {
       const resBody = await connector.deployContractGoSourceV1(reqBody);
       res.status(HttpStatus.OK);
       res.json(resBody);
-    } catch (ex) {
-      this.log.error(`${fnTag} failed to serve contract deploy request`, ex);
-      res.status(HttpStatus.INTERNAL_SERVER_ERROR);
-      res.statusMessage = (ex as Error).message;
-      res.json({ error: (ex as Error).stack });
+    } catch (ex: unknown) {
+      if (axios.isAxiosError(ex)) {
+        this.log.error(`${fnTag} failed to serve contract deploy request`, ex);
+        res.status(HttpStatus.INTERNAL_SERVER_ERROR);
+        res.statusMessage = ex.message;
+        res.json({ error: ex.stack });
+      } else if (ex instanceof Error) {
+        throw new RuntimeError("unexpected exception", ex);
+      } else {
+        throw new RuntimeError(
+          "unexpected exception with incorrect type",
+          JSON.stringify(ex),
+        );
+      }
     }
   }
 }

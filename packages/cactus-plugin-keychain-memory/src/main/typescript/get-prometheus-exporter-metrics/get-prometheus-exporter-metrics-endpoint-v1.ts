@@ -19,6 +19,8 @@ import OAS from "../../json/openapi.json";
 import { registerWebServiceEndpoint } from "@hyperledger/cactus-core";
 
 import { PluginKeychainMemory } from "../plugin-keychain-memory";
+import axios from "axios";
+import { RuntimeError } from "run-time-error";
 
 export interface IGetPrometheusExporterMetricsEndpointV1Options {
   logLevel?: LogLevelDesc;
@@ -91,11 +93,20 @@ export class GetPrometheusExporterMetricsEndpointV1
       const resBody = await this.opts.plugin.getPrometheusExporterMetrics();
       res.status(200);
       res.send(resBody);
-    } catch (ex) {
-      this.log.error(`${fnTag} failed to serve request`, ex);
-      res.status(500);
-      res.statusMessage = (ex as Error).message;
-      res.json({ error: (ex as Error).stack });
+    } catch (ex: unknown) {
+      if (axios.isAxiosError(ex)) {
+        this.log.error(`${fnTag} failed to serve request`, ex);
+        res.status(500);
+        res.statusMessage = ex.message;
+        res.json({ error: ex.stack });
+      } else if (ex instanceof Error) {
+        throw new RuntimeError("unexpected exception", ex);
+      } else {
+        throw new RuntimeError(
+          "unexpected exception with incorrect type",
+          JSON.stringify(ex),
+        );
+      }
     }
   }
 }

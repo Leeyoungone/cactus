@@ -50,6 +50,7 @@ import { WatchHealthcheckV1Endpoint } from "./web-services/watch-healthcheck-v1-
 import * as default_service from "./generated/proto/protoc-gen-ts/services/default_service";
 import { GrpcServerApiServer } from "./web-services/grpc/grpc-server-api-server";
 import { determineAddressFamily } from "./common/determine-address-family";
+import axios from "axios";
 
 export interface IApiServerConstructorOptions {
   readonly pluginManagerOptions?: { pluginsPath: string };
@@ -215,17 +216,26 @@ export class ApiServer {
       }
 
       return { addressInfoCockpit, addressInfoApi, addressInfoGrpc };
-    } catch (ex) {
-      const errorMessage = `Failed to start ApiServer: ${(ex as Error).stack}`;
-      this.log.error(errorMessage);
-      this.log.error(`Attempting shutdown...`);
-      try {
-        await this.shutdown();
-        this.log.info(`Server shut down after crash OK`);
-      } catch (ex) {
-        this.log.error(ApiServer.E_POST_CRASH_SHUTDOWN, ex);
+    } catch (ex: unknown) {
+      if (axios.isAxiosError(ex)) {
+        const errorMessage = `Failed to start ApiServer: ${ex.stack}`;
+        this.log.error(errorMessage);
+        this.log.error(`Attempting shutdown...`);
+        try {
+          await this.shutdown();
+          this.log.info(`Server shut down after crash OK`);
+        } catch (ex: unknown) {
+          this.log.error(ApiServer.E_POST_CRASH_SHUTDOWN, ex);
+        }
+        throw new Error(errorMessage);
+      } else if (ex instanceof Error) {
+        throw new RuntimeError("unexpected exception", ex);
+      } else {
+        throw new RuntimeError(
+          "unexpected exception with incorrect type",
+          JSON.stringify(ex),
+        );
       }
-      throw new Error(errorMessage);
     }
   }
 
@@ -333,10 +343,19 @@ export class ApiServer {
     try {
       await fs.mkdirp(pluginPackageDir);
       this.log.debug(`${pkgName} plugin package dir: %o`, pluginPackageDir);
-    } catch (ex) {
-      const errorMessage =
-        "Could not create plugin installation directory, check the file-system permissions.";
-      throw new RuntimeError(errorMessage, ex as Error);
+    } catch (ex: unknown) {
+      if (axios.isAxiosError(ex)) {
+        const errorMessage =
+          "Could not create plugin installation directory, check the file-system permissions.";
+        throw new RuntimeError(errorMessage, ex);
+      } else if (ex instanceof Error) {
+        throw new RuntimeError("unexpected exception", ex);
+      } else {
+        throw new RuntimeError(
+          "unexpected exception with incorrect type",
+          JSON.stringify(ex),
+        );
+      }
     }
     try {
       lmify.setPackageManager("npm");
@@ -358,11 +377,17 @@ export class ApiServer {
         throw new RuntimeError("Non-zero exit code: ", JSON.stringify(out));
       }
       this.log.info(`Installed ${pkgName} OK`);
-    } catch (ex) {
-      throw new RuntimeError(
-        `${fnTag} plugin install fail: ${pkgName}`,
-        ex as Error,
-      );
+    } catch (ex: unknown) {
+      if (axios.isAxiosError(ex)) {
+        throw new RuntimeError(`${fnTag} plugin install fail: ${pkgName}`, ex);
+      } else if (ex instanceof Error) {
+        throw new RuntimeError("unexpected exception", ex);
+      } else {
+        throw new RuntimeError(
+          "unexpected exception with incorrect type",
+          JSON.stringify(ex),
+        );
+      }
     }
   }
 

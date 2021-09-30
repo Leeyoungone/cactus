@@ -32,6 +32,8 @@ import {
   ICarbonAccountingFabricContractDeploymentInfo,
   ICarbonAccountingXdaiContractDeploymentInfo,
 } from "@hyperledger/cactus-example-carbon-accounting-business-logic-plugin";
+import { RuntimeError } from "run-time-error";
+import axios from "axios";
 
 export interface ICarbonAccountingAppDummyInfrastructureOptions {
   logLevel?: LogLevelDesc;
@@ -141,9 +143,18 @@ export class CarbonAccountingAppDummyInfrastructure {
         this.fabric.stop().then(() => this.fabric.destroy()),
       ]);
       this.log.info(`Stopped OK`);
-    } catch (ex) {
-      this.log.error(`Stopping crashed: `, ex);
-      throw ex;
+    } catch (ex: unknown) {
+      if (axios.isAxiosError(ex)) {
+        this.log.error(`Stopping crashed: `, ex);
+        throw ex;
+      } else if (ex instanceof Error) {
+        throw new RuntimeError("unexpected exception", ex);
+      } else {
+        throw new RuntimeError(
+          "unexpected exception with incorrect type",
+          JSON.stringify(ex),
+        );
+      }
     }
   }
 
@@ -152,9 +163,18 @@ export class CarbonAccountingAppDummyInfrastructure {
       this.log.info(`Starting dummy infrastructure...`);
       await Promise.all([this.xdai.start(), this.fabric.start()]);
       this.log.info(`Started dummy infrastructure OK`);
-    } catch (ex) {
-      this.log.error(`Starting of dummy infrastructure crashed: `, ex);
-      throw ex;
+    } catch (ex: unknown) {
+      if (axios.isAxiosError(ex)) {
+        this.log.error(`Starting of dummy infrastructure crashed: `, ex);
+        throw ex;
+      } else if (ex instanceof Error) {
+        throw new RuntimeError("unexpected exception", ex);
+      } else {
+        throw new RuntimeError(
+          "unexpected exception with incorrect type",
+          JSON.stringify(ex),
+        );
+      }
     }
   }
 
@@ -361,9 +381,18 @@ export class CarbonAccountingAppDummyInfrastructure {
           channelName: channelId,
         },
       };
-    } catch (ex) {
-      this.log.error(`Deployment of smart contracts crashed: `, ex);
-      throw ex;
+    } catch (ex: unknown) {
+      if (axios.isAxiosError(ex)) {
+        this.log.error(`Deployment of smart contracts crashed: `, ex);
+        throw ex;
+      } else if (ex instanceof Error) {
+        throw new RuntimeError("unexpected exception", ex);
+      } else {
+        throw new RuntimeError(
+          "unexpected exception with incorrect type",
+          JSON.stringify(ex),
+        );
+      }
     }
   }
 

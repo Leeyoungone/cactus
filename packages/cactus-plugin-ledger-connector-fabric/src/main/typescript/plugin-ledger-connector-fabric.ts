@@ -107,6 +107,8 @@ import {
   getTransactionReceiptByTxID,
   IGetTransactionReceiptByTxIDOptions,
 } from "./common/get-transaction-receipt-by-tx-id";
+import axios from "axios";
+import { RuntimeError } from "run-time-error";
 /**
  * Constant value holding the default $GOPATH in the Fabric CLI container as
  * observed on fabric deployments that are produced by the official examples
@@ -1027,13 +1029,22 @@ export class PluginLedgerConnectorFabric
                 JSON.stringify(transientMap[key]),
               );
             }
-          } catch (ex) {
+          } catch (ex: unknown) {
             this.log.error(`Building transient map crashed: `, ex);
-            throw new Error(
-              `${fnTag} Unable to build the transient map: ${
-                (ex as Error).message
-              }`,
-            );
+            if (axios.isAxiosError(ex)) {
+              throw new Error(
+                `${fnTag} Unable to build the transient map: ${
+                  (ex as Error).message
+                }`,
+              );
+            } else if (ex instanceof Error) {
+              throw new RuntimeError("unexpected exception", ex);
+            } else {
+              throw new RuntimeError(
+                "unexpected exception with incorrect type",
+                JSON.stringify(ex),
+              );
+            }
           }
 
           const transactionProposal = await contract.createTransaction(fnName);
@@ -1064,11 +1075,20 @@ export class PluginLedgerConnectorFabric
       this.prometheusExporter.addCurrentTransaction();
 
       return res;
-    } catch (ex) {
-      this.log.error(`transact() crashed: `, ex);
-      throw new Error(
-        `${fnTag} Unable to run transaction: ${(ex as Error).message}`,
-      );
+    } catch (ex: unknown) {
+      if (axios.isAxiosError(ex)) {
+        this.log.error(`transact() crashed: `, ex);
+        throw new Error(
+          `${fnTag} Unable to run transaction: ${(ex as Error).message}`,
+        );
+      } else if (ex instanceof Error) {
+        throw new RuntimeError("unexpected exception", ex);
+      } else {
+        throw new RuntimeError(
+          "unexpected exception with incorrect type",
+          JSON.stringify(ex),
+        );
+      }
     }
   }
   public async getTransactionReceiptByTxID(
@@ -1102,9 +1122,18 @@ export class PluginLedgerConnectorFabric
       this.log.debug(`createCaClient() caName=%o caUrl=%o`, caName, caUrl);
       this.log.debug(`createCaClient() tlsOptions=%o`, tlsOptions);
       return new FabricCAServices(caUrl, tlsOptions, caName);
-    } catch (ex) {
-      this.log.error(`createCaClient() Failure:`, ex);
-      throw new Error(`${fnTag} Inner Exception: ${(ex as Error)?.message}`);
+    } catch (ex: unknown) {
+      if (axios.isAxiosError(ex)) {
+        this.log.error(`createCaClient() Failure:`, ex);
+        throw new Error(`${fnTag} Inner Exception: ${(ex as Error)?.message}`);
+      } else if (ex instanceof Error) {
+        throw new RuntimeError("unexpected exception", ex);
+      } else {
+        throw new RuntimeError(
+          "unexpected exception with incorrect type",
+          JSON.stringify(ex),
+        );
+      }
     }
   }
 
@@ -1138,9 +1167,18 @@ export class PluginLedgerConnectorFabric
       await wallet.put(identityId, x509Identity);
 
       return [x509Identity, wallet];
-    } catch (ex) {
-      this.log.error(`enrollAdmin() Failure:`, ex);
-      throw new Error(`${fnTag} Exception: ${(ex as Error)?.message}`);
+    } catch (ex: unknown) {
+      if (axios.isAxiosError(ex)) {
+        this.log.error(`enrollAdmin() Failure:`, ex);
+        throw new Error(`${fnTag} Exception: ${(ex as Error)?.message}`);
+      } else if (ex instanceof Error) {
+        throw new RuntimeError("unexpected exception", ex);
+      } else {
+        throw new RuntimeError(
+          "unexpected exception with incorrect type",
+          JSON.stringify(ex),
+        );
+      }
     }
   }
   /**

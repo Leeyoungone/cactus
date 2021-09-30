@@ -18,6 +18,8 @@ import { PluginLedgerConnectorBesu } from "../plugin-ledger-connector-besu";
 import { GetBesuRecordV1Request } from "../generated/openapi/typescript-axios/api";
 
 import OAS from "../../json/openapi.json";
+import axios from "axios";
+import { RuntimeError } from "run-time-error";
 
 export interface IGetBesuRecordEndpointV1Options {
   logLevel?: LogLevelDesc;
@@ -91,12 +93,21 @@ export class GetBesuRecordEndpointV1 implements IWebServiceEndpoint {
       const reqBody: GetBesuRecordV1Request = req.body as GetBesuRecordV1Request;
       const resBody = await this.options.connector.getBesuRecord(reqBody);
       res.json(resBody);
-    } catch (ex) {
-      this.log.error(`Crash while serving ${reqTag}`, ex);
-      res.status(500).json({
-        message: "Internal Server Error",
-        error: (ex as Error)?.stack || (ex as Error)?.message,
-      });
+    } catch (ex: unknown) {
+      if (axios.isAxiosError(ex)) {
+        this.log.error(`Crash while serving ${reqTag}`, ex);
+        res.status(500).json({
+          message: "Internal Server Error",
+          error: ex.stack || ex.message,
+        });
+      } else if (ex instanceof Error) {
+        throw new RuntimeError("unexpected exception", ex);
+      } else {
+        throw new RuntimeError(
+          "unexpected exception with incorrect type",
+          JSON.stringify(ex),
+        );
+      }
     }
   }
 }

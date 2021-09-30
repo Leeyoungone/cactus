@@ -35,6 +35,8 @@ import { DefaultApi as KeychainVaultApi } from "../../../../main/typescript/publ
 
 import { installOpenapiValidationMiddleware } from "@hyperledger/cactus-core";
 import OAS from "../../../../main/json/openapi.json";
+import axios from "axios";
+import { RuntimeError } from "run-time-error";
 
 const logLevel: LogLevelDesc = "TRACE";
 const testCase = "cactus-plugin-keychain-vault API";
@@ -142,16 +144,25 @@ test(`${testCase}`, async (t: Test) => {
       await apiClient.setKeychainEntryV1(({
         value: value1,
       } as any) as SetKeychainEntryRequest);
-    } catch (e) {
-      t2.equal(
-        (e as any).response.status,
-        400,
-        `Endpoint ${fSet} without required key: response.status === 400 OK`,
-      );
-      const fields = (e as any).response.data.map((param: any) =>
-        param.path.replace(".body.", ""),
-      );
-      t2.ok(fields.includes("key"), "Rejected because key is required");
+    } catch (e: unknown) {
+      if (axios.isAxiosError(e)) {
+        t2.equal(
+          e.response?.status,
+          400,
+          `Endpoint ${fSet} without required key: response.status === 400 OK`,
+        );
+        const fields = e.response?.data.map((param: any) =>
+          param.path.replace(".body.", ""),
+        );
+        t2.ok(fields.includes("key"), "Rejected because key is required");
+      } else if (e instanceof Error) {
+        throw new RuntimeError("unexpected exception", e);
+      } else {
+        throw new RuntimeError(
+          "unexpected exception with incorrect type",
+          JSON.stringify(e),
+        );
+      }
     }
     t2.end();
   });
@@ -161,16 +172,25 @@ test(`${testCase}`, async (t: Test) => {
       await apiClient.hasKeychainEntryV1(
         ({} as any) as HasKeychainEntryRequestV1,
       );
-    } catch (e) {
-      t2.equal(
-        (e as any).response.status,
-        400,
-        `Endpoint ${fHas} without required key: response.status === 400 OK`,
-      );
-      const fields = (e as any).response.data.map((param: any) =>
-        param.path.replace(".body.", ""),
-      );
-      t2.ok(fields.includes("key"), "Rejected because key is required");
+    } catch (e: unknown) {
+      if (axios.isAxiosError(e)) {
+        t2.equal(
+          e.response?.status,
+          400,
+          `Endpoint ${fHas} without required key: response.status === 400 OK`,
+        );
+        const fields = e.response?.data.map((param: any) =>
+          param.path.replace(".body.", ""),
+        );
+        t2.ok(fields.includes("key"), "Rejected because key is required");
+      } else if (e instanceof Error) {
+        throw new RuntimeError("unexpected exception", e);
+      } else {
+        throw new RuntimeError(
+          "unexpected exception with incorrect type",
+          JSON.stringify(e),
+        );
+      }
     }
     t2.end();
   });
@@ -180,16 +200,25 @@ test(`${testCase}`, async (t: Test) => {
       await apiClient.getKeychainEntryV1(
         ({} as any) as GetKeychainEntryRequest,
       );
-    } catch (e) {
-      t2.equal(
-        (e as any).response.status,
-        400,
-        `Endpoint ${fGet} without required key: response.status === 400 OK`,
-      );
-      const fields = (e as any).response.data.map((param: any) =>
-        param.path.replace(".body.", ""),
-      );
-      t2.ok(fields.includes("key"), "Rejected because key is required");
+    } catch (e: unknown) {
+      if (axios.isAxiosError(e)) {
+        t2.equal(
+          e.response?.status,
+          400,
+          `Endpoint ${fGet} without required key: response.status === 400 OK`,
+        );
+        const fields = e.response?.data.map((param: any) =>
+          param.path.replace(".body.", ""),
+        );
+        t2.ok(fields.includes("key"), "Rejected because key is required");
+      } else if (e instanceof Error) {
+        throw new RuntimeError("unexpected exception", e);
+      } else {
+        throw new RuntimeError(
+          "unexpected exception with incorrect type",
+          JSON.stringify(e),
+        );
+      }
     }
     t2.end();
   });
@@ -199,16 +228,25 @@ test(`${testCase}`, async (t: Test) => {
       await apiClient.deleteKeychainEntryV1(
         ({} as any) as DeleteKeychainEntryRequestV1,
       );
-    } catch (e) {
-      t2.equal(
-        (e as any).response.status,
-        400,
-        `Endpoint ${fDelete} without required key: response.status === 400 OK`,
-      );
-      const fields = (e as any).response.data.map((param: any) =>
-        param.path.replace(".body.", ""),
-      );
-      t2.ok(fields.includes("key"), "Rejected because key is required");
+    } catch (e: unknown) {
+      if (axios.isAxiosError(e)) {
+        t2.equal(
+          e.response?.status,
+          400,
+          `Endpoint ${fDelete} without required key: response.status === 400 OK`,
+        );
+        const fields = e.response?.data.map((param: any) =>
+          param.path.replace(".body.", ""),
+        );
+        t2.ok(fields.includes("key"), "Rejected because key is required");
+      } else if (e instanceof Error) {
+        throw new RuntimeError("unexpected exception", e);
+      } else {
+        throw new RuntimeError(
+          "unexpected exception with incorrect type",
+          JSON.stringify(e),
+        );
+      }
     }
     t2.end();
   });
@@ -220,19 +258,28 @@ test(`${testCase}`, async (t: Test) => {
         value: value1,
         fake: 4,
       } as any) as SetKeychainEntryRequest);
-    } catch (e) {
-      t2.equal(
-        (e as any).response.status,
-        400,
-        `Endpoint ${fSet} with fake=4: response.status === 400 OK`,
-      );
-      const fields = (e as any).response.data.map((param: any) =>
-        param.path.replace(".body.", ""),
-      );
-      t2.ok(
-        fields.includes("fake"),
-        "Rejected because fake is not a valid parameter",
-      );
+    } catch (e: unknown) {
+      if (axios.isAxiosError(e)) {
+        t2.equal(
+          e.response?.status,
+          400,
+          `Endpoint ${fSet} with fake=4: response.status === 400 OK`,
+        );
+        const fields = e.response?.data.map((param: any) =>
+          param.path.replace(".body.", ""),
+        );
+        t2.ok(
+          fields.includes("fake"),
+          "Rejected because fake is not a valid parameter",
+        );
+      } else if (e instanceof Error) {
+        throw new RuntimeError("unexpected exception", e);
+      } else {
+        throw new RuntimeError(
+          "unexpected exception with incorrect type",
+          JSON.stringify(e),
+        );
+      }
     }
     t2.end();
   });
@@ -243,19 +290,28 @@ test(`${testCase}`, async (t: Test) => {
         key: key1,
         fake: 4,
       } as any) as HasKeychainEntryRequestV1);
-    } catch (e) {
-      t2.equal(
-        (e as any).response.status,
-        400,
-        `Endpoint ${fHas} with fake=4: response.status === 400 OK`,
-      );
-      const fields = (e as any).response.data.map((param: any) =>
-        param.path.replace(".body.", ""),
-      );
-      t2.ok(
-        fields.includes("fake"),
-        "Rejected because fake is not a valid parameter",
-      );
+    } catch (e: unknown) {
+      if (axios.isAxiosError(e)) {
+        t2.equal(
+          e.response?.status,
+          400,
+          `Endpoint ${fHas} with fake=4: response.status === 400 OK`,
+        );
+        const fields = e.response?.data.map((param: any) =>
+          param.path.replace(".body.", ""),
+        );
+        t2.ok(
+          fields.includes("fake"),
+          "Rejected because fake is not a valid parameter",
+        );
+      } else if (e instanceof Error) {
+        throw new RuntimeError("unexpected exception", e);
+      } else {
+        throw new RuntimeError(
+          "unexpected exception with incorrect type",
+          JSON.stringify(e),
+        );
+      }
     }
     t2.end();
   });
@@ -266,19 +322,28 @@ test(`${testCase}`, async (t: Test) => {
         key: key1,
         fake: 4,
       } as any) as GetKeychainEntryRequest);
-    } catch (e) {
-      t2.equal(
-        (e as any).response.status,
-        400,
-        `Endpoint ${fGet} with fake=4: response.status === 400 OK`,
-      );
-      const fields = (e as any).response.data.map((param: any) =>
-        param.path.replace(".body.", ""),
-      );
-      t2.ok(
-        fields.includes("fake"),
-        "Rejected because fake is not a valid parameter",
-      );
+    } catch (e: unknown) {
+      if (axios.isAxiosError(e)) {
+        t2.equal(
+          e.response?.status,
+          400,
+          `Endpoint ${fGet} with fake=4: response.status === 400 OK`,
+        );
+        const fields = e.response?.data.map((param: any) =>
+          param.path.replace(".body.", ""),
+        );
+        t2.ok(
+          fields.includes("fake"),
+          "Rejected because fake is not a valid parameter",
+        );
+      } else if (e instanceof Error) {
+        throw new RuntimeError("unexpected exception", e);
+      } else {
+        throw new RuntimeError(
+          "unexpected exception with incorrect type",
+          JSON.stringify(e),
+        );
+      }
     }
     t2.end();
   });
@@ -289,19 +354,28 @@ test(`${testCase}`, async (t: Test) => {
         key: key1,
         fake: 4,
       } as any) as GetKeychainEntryRequest);
-    } catch (e) {
-      t2.equal(
-        (e as any).response.status,
-        400,
-        `Endpoint ${fDelete} with fake=4: response.status === 400 OK`,
-      );
-      const fields = (e as any).response.data.map((param: any) =>
-        param.path.replace(".body.", ""),
-      );
-      t2.ok(
-        fields.includes("fake"),
-        "Rejected because fake is not a valid parameter",
-      );
+    } catch (e: unknown) {
+      if (axios.isAxiosError(e)) {
+        t2.equal(
+          e.response?.status,
+          400,
+          `Endpoint ${fDelete} with fake=4: response.status === 400 OK`,
+        );
+        const fields = e.response?.data.map((param: any) =>
+          param.path.replace(".body.", ""),
+        );
+        t2.ok(
+          fields.includes("fake"),
+          "Rejected because fake is not a valid parameter",
+        );
+      } else if (e instanceof Error) {
+        throw new RuntimeError("unexpected exception", e);
+      } else {
+        throw new RuntimeError(
+          "unexpected exception with incorrect type",
+          JSON.stringify(e),
+        );
+      }
     }
     t2.end();
   });

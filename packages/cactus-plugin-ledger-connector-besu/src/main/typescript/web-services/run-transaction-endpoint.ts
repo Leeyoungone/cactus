@@ -18,6 +18,8 @@ import { PluginLedgerConnectorBesu } from "../plugin-ledger-connector-besu";
 
 import OAS from "../../json/openapi.json";
 import { RunTransactionRequest } from "../generated/openapi/typescript-axios";
+import axios from "axios";
+import { RuntimeError } from "run-time-error";
 
 export interface IRunTransactionEndpointOptions {
   logLevel?: LogLevelDesc;
@@ -89,12 +91,21 @@ export class RunTransactionEndpoint implements IWebServiceEndpoint {
     try {
       const resBody = await this.options.connector.transact(reqBody);
       res.json({ success: true, data: resBody });
-    } catch (ex) {
-      this.log.error(`Crash while serving ${reqTag}`, ex);
-      res.status(500).json({
-        message: "Internal Server Error",
-        error: (ex as Error)?.stack || (ex as Error)?.message,
-      });
+    } catch (ex: unknown) {
+      if (axios.isAxiosError(ex)) {
+        this.log.error(`Crash while serving ${reqTag}`, ex);
+        res.status(500).json({
+          message: "Internal Server Error",
+          error: ex.stack || ex.message,
+        });
+      } else if (ex instanceof Error) {
+        throw new RuntimeError("unexpected exception", ex);
+      } else {
+        throw new RuntimeError(
+          "unexpected exception with incorrect type",
+          JSON.stringify(ex),
+        );
+      }
     }
   }
 }
