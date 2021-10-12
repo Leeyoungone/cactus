@@ -38,6 +38,7 @@ import cryptoHelper from "iroha-helpers-ts/lib/cryptoHelper";
 
 import OAS from "../../../../main/json/openapi.json";
 import { installOpenapiValidationMiddleware } from "@hyperledger/cactus-core";
+import axios from "axios";
 
 const testCase = "Iroha plugin openapi validation";
 const logLevel: LogLevelDesc = "INFO";
@@ -174,16 +175,25 @@ test(testCase, async (t: Test) => {
       await apiClient.runTransactionV1(
         (parameters as any) as RunTransactionRequestV1,
       );
-    } catch (e) {
-      t2.equal(
-        e.response.status,
-        400,
-        `Endpoint ${fRun} without required params: response.status === 400 OK`,
-      );
-      const fields = e.response.data.map((param: any) =>
-        param.path.replace(".body.", ""),
-      );
-      t2.ok(fields.includes("params"), "Rejected because params is required");
+    } catch (e: unknown) {
+      if (axios.isAxiosError(e)) {
+        t2.equal(
+          e.response?.status,
+          400,
+          `Endpoint ${fRun} without required params: response.status === 400 OK`,
+        );
+        const fields = e.response?.data.map((param: any) =>
+          param.path.replace(".body.", ""),
+        );
+        t2.ok(fields.includes("params"), "Rejected because params is required");
+      } else if (e instanceof Error) {
+        throw new RuntimeError("unexpected exception", e);
+      } else {
+        throw new RuntimeError(
+          "unexpected exception with incorrect type",
+          JSON.stringify(e),
+        );
+      }
     }
     t2.end();
   });
@@ -207,19 +217,28 @@ test(testCase, async (t: Test) => {
       await apiClient.runTransactionV1(
         (parameters as any) as RunTransactionRequestV1,
       );
-    } catch (e) {
-      t2.equal(
-        e.response.status,
-        400,
-        `Endpoint ${fRun} with fake=4: response.status === 400 OK`,
-      );
-      const fields = e.response.data.map((param: any) =>
-        param.path.replace(".body.", ""),
-      );
-      t2.ok(
-        fields.includes("fake"),
-        "Rejected because fake is not a valid parameter",
-      );
+    } catch (e: unknown) {
+      if (axios.isAxiosError(e)) {
+        t2.equal(
+          e.response?.status,
+          400,
+          `Endpoint ${fRun} with fake=4: response.status === 400 OK`,
+        );
+        const fields = e.response?.data.map((param: any) =>
+          param.path.replace(".body.", ""),
+        );
+        t2.ok(
+          fields.includes("fake"),
+          "Rejected because fake is not a valid parameter",
+        );
+      } else if (e instanceof Error) {
+        throw new RuntimeError("unexpected exception", e);
+      } else {
+        throw new RuntimeError(
+          "unexpected exception with incorrect type",
+          JSON.stringify(e),
+        );
+      }
     }
     t2.end();
   });
