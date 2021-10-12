@@ -894,18 +894,22 @@ test(testCase, async (t: Test) => {
       const parameters = {};
       await apiClient.getBesuRecordV1(parameters as GetBesuRecordV1Request);
     } catch (e: unknown) {
-      t2.equal(
-        e.response.status,
-        400,
-        `Endpoint ${fRecord} without required transactionHash: response.status === 400 OK`,
-      );
-      const fields = e.response.data.map((param: any) =>
-        param.path.replace(".body.", ""),
-      );
-      t2.ok(
-        fields.includes("transactionHash"),
-        "Rejected because transactionHash is required",
-      );
+      if (axios.isAxiosError(e)) {
+        t2.equal(
+          e.response?.status,
+          400,
+          `Endpoint ${fRecord} without required transactionHash: response.status === 400 OK`,
+        );
+        const fields = e.response?.data.map((param: any) =>
+          param.path.replace(".body.", ""),
+        );
+        t2.ok(
+          fields.includes("transactionHash"),
+          "Rejected because transactionHash is required",
+        );
+      } else {
+        t2.fail("expected an axios error, got something else");
+      }
     }
 
     t2.end();
@@ -918,21 +922,24 @@ test(testCase, async (t: Test) => {
         fake: 5,
       };
       await apiClient.getBesuRecordV1(parameters as GetBesuRecordV1Request);
-    } catch (e) {
-      t2.equal(
-        e.response.status,
-        400,
-        `Endpoint ${fRecord} with fake=4: response.status === 400 OK`,
-      );
-      const fields = e.response.data.map((param: any) =>
-        param.path.replace(".body.", ""),
-      );
-      t2.ok(
-        fields.includes("fake"),
-        "Rejected because fake is not a valid parameter",
-      );
+    } catch (e: unknown) {
+      if (axios.isAxiosError(e)) {
+        t2.equal(
+          e.response?.status,
+          400,
+          `Endpoint ${fRecord} with fake=4: response.status === 400 OK`,
+        );
+        const fields = e.response?.data.map((param: any) =>
+          param.path.replace(".body.", ""),
+        );
+        t2.ok(
+          fields.includes("fake"),
+          "Rejected because fake is not a valid parameter",
+        );
+      } else {
+        t2.fail("expected an axios error, got something else");
+      }
     }
-
     t2.end();
   });
 
