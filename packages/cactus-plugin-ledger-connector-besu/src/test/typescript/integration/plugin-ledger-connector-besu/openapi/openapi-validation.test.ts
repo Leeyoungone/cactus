@@ -42,7 +42,6 @@ import { BesuApiClientOptions } from "../../../../../main/typescript/api-client/
 import { installOpenapiValidationMiddleware } from "@hyperledger/cactus-core";
 import OAS from "../../../../../main/json/openapi.json";
 import axios from "axios";
-import { RuntimeError } from "run-time-error";
 
 const logLevel: LogLevelDesc = "TRACE";
 const testCase = "Besu API";
@@ -225,7 +224,6 @@ test(testCase, async (t: Test) => {
         t2.fail(JSON.stringify(e));
       }
     }
-
     t2.end();
   });
 
@@ -265,8 +263,9 @@ test(testCase, async (t: Test) => {
       } else {
         t2.fail("excepted an axios error, got something else");
       }
-    t2.end();
-  };
+      t2.end();
+    }
+  });
 
   test(`${testCase} - ${fInvoke} - ${cOk}`, async (t2: Test) => {
     const parameters = {
@@ -312,7 +311,7 @@ test(testCase, async (t: Test) => {
         (parameters as any) as InvokeContractV1Request,
       );
     } catch (e: unknown) {
-      if (axios.isAxiosError(e)){
+      if (axios.isAxiosError(e)) {
         t2.equal(
           e.response?.status,
           400,
@@ -576,7 +575,7 @@ test(testCase, async (t: Test) => {
         t2.ok(
           fields.includes("keychainId"),
           "Rejected because keychainId is required",
-        )
+        );
       } else {
         t2.fail("expected an axios error, got something else");
       }
@@ -671,7 +670,10 @@ test(testCase, async (t: Test) => {
         const fields = e.response?.data.map((param: any) =>
           param.path.replace(".body.", ""),
         );
-        t2.ok(fields.includes("address"), "Rejected because address is required");
+        t2.ok(
+          fields.includes("address"),
+          "Rejected because address is required",
+        );
       } else {
         t2.fail("expected an axios error, got something else");
       }
@@ -768,8 +770,6 @@ test(testCase, async (t: Test) => {
       } else {
         t2.fail("expected an axios error, got something else");
       }
-
-      
     }
 
     t2.end();
@@ -804,11 +804,13 @@ test(testCase, async (t: Test) => {
         const fields = e.response?.data.map((param: any) =>
           param.path.replace(".body.", ""),
         );
-        t2.ok(fields.includes("address"), "Rejected because address is required");
+        t2.ok(
+          fields.includes("address"),
+          "Rejected because address is required",
+        );
       } else {
         t2.fail("expected an axios error, got something else");
       }
-
     }
 
     t2.end();
