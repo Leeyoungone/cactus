@@ -105,12 +105,9 @@ test(testCase, async (t: Test) => {
 
   try {
     await carbonAccountingApp.start();
-  } catch (ex: unknown) {
-    if (ex instanceof Error) {
-      log.error(`CarbonAccountingApp crashed. failing test...`, ex);
-    } else {
-      log.error(`CarbonAccountingApp crashed. failing test...`, ex);
-    }
+  } catch (ex) {
+    log.error(`CarbonAccountingApp crashed. failing test...`, ex);
+    throw ex;
   }
 
   const jwtPayload = {
@@ -175,15 +172,9 @@ test(testCase, async (t: Test) => {
       );
       t.notok(out.response?.data.data, "out.response.data.data falsy OK");
       t.notok(out.response?.data.success, "out.response.data.success falsy OK");
-    } else if (out instanceof Error) {
-      throw new RuntimeError("unexpected exception", out);
     } else {
-      throw new RuntimeError(
-        "unexpected exception with incorrect type",
-        JSON.stringify(out),
-      );
+      t.fail("expected an axios error, got something else");
     }
   }
-
   t.end();
 });

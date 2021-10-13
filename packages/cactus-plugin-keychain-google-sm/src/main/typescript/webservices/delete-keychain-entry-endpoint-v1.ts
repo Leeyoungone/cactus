@@ -94,10 +94,13 @@ export class DeleteKeychainEntryV1Endpoint implements IWebServiceEndpoint {
       if (ex instanceof Error) {
         res.status(500).json({
           message: "Internal Server Error",
-          error: ex?.stack || ex?.message,
+          error: ex.stack || ex.message,
         });
       } else {
-        this.log.error(`Crash while serving ${reqTag}`, ex);
+        res.status(500).json({
+          message: "Internal Server Error",
+          error: JSON.stringify(ex),
+        });
       }
     }
   }

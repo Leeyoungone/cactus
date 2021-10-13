@@ -35,6 +35,8 @@ import { Configuration } from "@hyperledger/cactus-core-api";
 
 import { installOpenapiValidationMiddleware } from "@hyperledger/cactus-core";
 import OAS from "../../../../main/json/openapi.json";
+import axios from "axios";
+import { RuntimeError } from "run-time-error";
 
 const testCase = "check openapi validation in fabric endpoints";
 const logLevel: LogLevelDesc = "TRACE";
@@ -269,19 +271,28 @@ test(testCase, async (t: Test) => {
       await apiClient.deployContractGoSourceV1(
         (parameters as any) as DeployContractGoSourceV1Request,
       );
-    } catch (e) {
-      t2.equal(
-        e.response.status,
-        400,
-        `Endpoint ${fDeployGo} without required targetPeerAddresses: response.status === 400 OK`,
-      );
-      const fields = e.response.data.map((param: any) =>
-        param.path.replace(".body.", ""),
-      );
-      t2.ok(
-        fields.includes("targetPeerAddresses"),
-        "Rejected because targetPeerAddresses is required",
-      );
+    } catch (e: unknown) {
+      if (axios.isAxiosError(e)) {
+        t2.equal(
+          e.response?.status,
+          400,
+          `Endpoint ${fDeployGo} without required targetPeerAddresses: response.status === 400 OK`,
+        );
+        const fields = e.response?.data.map((param: any) =>
+          param.path.replace(".body.", ""),
+        );
+        t2.ok(
+          fields.includes("targetPeerAddresses"),
+          "Rejected because targetPeerAddresses is required",
+        );
+      } else if (e instanceof Error) {
+        throw new RuntimeError("unexpected exception", e);
+      } else {
+        throw new RuntimeError(
+          "unexpected exception with incorrect type",
+          JSON.stringify(e),
+        );
+      }
     }
 
     t2.end();
@@ -331,19 +342,28 @@ test(testCase, async (t: Test) => {
       await apiClient.deployContractGoSourceV1(
         (parameters as any) as DeployContractGoSourceV1Request,
       );
-    } catch (e) {
-      t2.equal(
-        e.response.status,
-        400,
-        `Endpoint ${fDeployGo} with fake=4: response.status === 400 OK`,
-      );
-      const fields = e.response.data.map((param: any) =>
-        param.path.replace(".body.", ""),
-      );
-      t2.ok(
-        fields.includes("fake"),
-        "Rejected because fake is not a valid parameter",
-      );
+    } catch (e: unknown) {
+      if (axios.isAxiosError(e)) {
+        t2.equal(
+          e.response?.status,
+          400,
+          `Endpoint ${fDeployGo} with fake=4: response.status === 400 OK`,
+        );
+        const fields = e.response?.data.map((param: any) =>
+          param.path.replace(".body.", ""),
+        );
+        t2.ok(
+          fields.includes("fake"),
+          "Rejected because fake is not a valid parameter",
+        );
+      } else if (e instanceof Error) {
+        throw new RuntimeError("unexpected exception", e);
+      } else {
+        throw new RuntimeError(
+          "unexpected exception with incorrect type",
+          JSON.stringify(e),
+        );
+      }
     }
 
     t2.end();
