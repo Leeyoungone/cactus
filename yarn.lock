@@ -2352,6 +2352,38 @@
   resolved "https://registry.yarnpkg.com/@hutson/parse-repository-url/-/parse-repository-url-3.0.2.tgz#98c23c950a3d9b6c8f0daed06da6c3af06981340"
   integrity sha512-H9XAx3hc0BQHY6l+IFSWHDySypcXsvsuLhgYLUGywmJ5pswRVQJUHpOsobnLYp2ZUaUlKiKDrgWWhosOwAEM8Q==
 
+"@hyperledger/cactus-common@0.10.0":
+  version "0.10.0"
+  resolved "https://registry.yarnpkg.com/@hyperledger/cactus-common/-/cactus-common-0.10.0.tgz#1f6ce74f3a9d19af95029274ddc1a5e3babdb6f3"
+  integrity sha512-3lXgLZ6pZY63wsBKeIZUkYZFiaWU9tAXSlqqK7wm4o14ikV2jWqrv7f1bWKtKRdlSEce04PMjrpZ33JtHtl3Og==
+  dependencies:
+    json-stable-stringify "1.0.1"
+    key-encoder "2.0.3"
+    loglevel "1.7.1"
+    loglevel-plugin-prefix "0.8.4"
+    secp256k1 "4.0.2"
+    sha3 "2.1.4"
+
+"@hyperledger/cactus-core-api@0.10.0":
+  version "0.10.0"
+  resolved "https://registry.yarnpkg.com/@hyperledger/cactus-core-api/-/cactus-core-api-0.10.0.tgz#1756abedbe479055df43ac82702fd707e7ba2a51"
+  integrity sha512-9iTQTa8z3NxrkdGmAPEMrFVPNgJV91nrnbeMe0Ape78QvAW030slTp0Ygkec4pFErz7VWGz/onydUroGrFtTEg==
+  dependencies:
+    "@hyperledger/cactus-common" "0.10.0"
+    axios "0.21.4"
+
+"@hyperledger/cactus-core@0.10.0":
+  version "0.10.0"
+  resolved "https://registry.yarnpkg.com/@hyperledger/cactus-core/-/cactus-core-0.10.0.tgz#5bc3a633ae5e3be99db9a209d836504f661f397d"
+  integrity sha512-NA7WedCFAyxRstHBkjqpWvTBbRCuEU5yze2n7HSZJfNOTi1VNHzsHPp+ZRPfHD7mzSZJSuqMuNRlH+++QT8yPw==
+  dependencies:
+    "@hyperledger/cactus-common" "0.10.0"
+    "@hyperledger/cactus-core-api" "0.10.0"
+    express "4.17.1"
+    express-jwt-authz "2.4.1"
+    express-openapi-validator "4.12.12"
+    typescript-optional "2.0.1"
+
 "@improbable-eng/grpc-web-node-http-transport@^0.13.0":
   version "0.13.0"
   resolved "https://registry.yarnpkg.com/@improbable-eng/grpc-web-node-http-transport/-/grpc-web-node-http-transport-0.13.0.tgz#a8680c7a8bce4c2b44fe48ba4b7c55b320cf5f54"
