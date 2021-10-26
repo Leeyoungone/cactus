@@ -36,7 +36,6 @@ import { DefaultApi as KeychainVaultApi } from "../../../../main/typescript/publ
 import { installOpenapiValidationMiddleware } from "@hyperledger/cactus-core";
 import OAS from "../../../../main/json/openapi.json";
 import axios from "axios";
-import { RuntimeError } from "run-time-error";
 
 const logLevel: LogLevelDesc = "TRACE";
 const testCase = "cactus-plugin-keychain-vault API";
@@ -155,13 +154,8 @@ test(`${testCase}`, async (t: Test) => {
           param.path.replace(".body.", ""),
         );
         t2.ok(fields.includes("key"), "Rejected because key is required");
-      } else if (e instanceof Error) {
-        throw new RuntimeError("unexpected exception", e);
       } else {
-        throw new RuntimeError(
-          "unexpected exception with incorrect type",
-          JSON.stringify(e),
-        );
+        t2.fail("expected an axios error, got something else");
       }
     }
     t2.end();
@@ -183,13 +177,8 @@ test(`${testCase}`, async (t: Test) => {
           param.path.replace(".body.", ""),
         );
         t2.ok(fields.includes("key"), "Rejected because key is required");
-      } else if (e instanceof Error) {
-        throw new RuntimeError("unexpected exception", e);
       } else {
-        throw new RuntimeError(
-          "unexpected exception with incorrect type",
-          JSON.stringify(e),
-        );
+        t2.fail("expected an axios error, got something else");
       }
     }
     t2.end();
@@ -211,13 +200,8 @@ test(`${testCase}`, async (t: Test) => {
           param.path.replace(".body.", ""),
         );
         t2.ok(fields.includes("key"), "Rejected because key is required");
-      } else if (e instanceof Error) {
-        throw new RuntimeError("unexpected exception", e);
       } else {
-        throw new RuntimeError(
-          "unexpected exception with incorrect type",
-          JSON.stringify(e),
-        );
+        t2.fail("expected an axios error, got something else");
       }
     }
     t2.end();
@@ -239,13 +223,8 @@ test(`${testCase}`, async (t: Test) => {
           param.path.replace(".body.", ""),
         );
         t2.ok(fields.includes("key"), "Rejected because key is required");
-      } else if (e instanceof Error) {
-        throw new RuntimeError("unexpected exception", e);
       } else {
-        throw new RuntimeError(
-          "unexpected exception with incorrect type",
-          JSON.stringify(e),
-        );
+        t2.fail("expected an axios error, got something else");
       }
     }
     t2.end();
@@ -272,13 +251,8 @@ test(`${testCase}`, async (t: Test) => {
           fields.includes("fake"),
           "Rejected because fake is not a valid parameter",
         );
-      } else if (e instanceof Error) {
-        throw new RuntimeError("unexpected exception", e);
       } else {
-        throw new RuntimeError(
-          "unexpected exception with incorrect type",
-          JSON.stringify(e),
-        );
+        t2.fail("expected an axios error, got something else");
       }
     }
     t2.end();
@@ -304,13 +278,8 @@ test(`${testCase}`, async (t: Test) => {
           fields.includes("fake"),
           "Rejected because fake is not a valid parameter",
         );
-      } else if (e instanceof Error) {
-        throw new RuntimeError("unexpected exception", e);
       } else {
-        throw new RuntimeError(
-          "unexpected exception with incorrect type",
-          JSON.stringify(e),
-        );
+        t2.fail("expected an axios error, got something else");
       }
     }
     t2.end();
@@ -336,13 +305,8 @@ test(`${testCase}`, async (t: Test) => {
           fields.includes("fake"),
           "Rejected because fake is not a valid parameter",
         );
-      } else if (e instanceof Error) {
-        throw new RuntimeError("unexpected exception", e);
       } else {
-        throw new RuntimeError(
-          "unexpected exception with incorrect type",
-          JSON.stringify(e),
-        );
+        t2.fail("expected an axios error, got something else");
       }
     }
     t2.end();
@@ -368,13 +332,8 @@ test(`${testCase}`, async (t: Test) => {
           fields.includes("fake"),
           "Rejected because fake is not a valid parameter",
         );
-      } else if (e instanceof Error) {
-        throw new RuntimeError("unexpected exception", e);
       } else {
-        throw new RuntimeError(
-          "unexpected exception with incorrect type",
-          JSON.stringify(e),
-        );
+        t2.fail("expected an axios error, got something else");
       }
     }
     t2.end();

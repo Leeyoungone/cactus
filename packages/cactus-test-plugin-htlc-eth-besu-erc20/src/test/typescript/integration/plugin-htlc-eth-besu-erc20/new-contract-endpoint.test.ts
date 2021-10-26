@@ -33,6 +33,7 @@ import {
 import { PluginKeychainMemory } from "@hyperledger/cactus-plugin-keychain-memory";
 import HashTimeLockJSON from "../../../../../../cactus-plugin-htlc-eth-besu-erc20/src/main/solidity/contracts/HashedTimeLockContract.json";
 import TestTokenJSON from "../../../solidity/token-erc20-contract/Test_Token.json";
+import axios from "axios";
 
 const logLevel: LogLevelDesc = "INFO";
 const estimatedGas = 6721975;
@@ -402,8 +403,12 @@ test("Test new invalid contract with 0 inputAmount token for HTLC", async (t: Te
     };
     const res = await api.newContractV1(request);
     t.equal(res.status, 400, "response status is 400");
-  } catch (error) {
-    t.equal((error as any).response.status, 400, "response status is 400");
+  } catch (error: unknown) {
+    if (axios.isAxiosError(error)) {
+      t.equal(error.response?.status, 400, "response status is 400");
+    } else {
+      t.fail("expected an axios error, got something else");
+    }
   }
   t.end();
 });

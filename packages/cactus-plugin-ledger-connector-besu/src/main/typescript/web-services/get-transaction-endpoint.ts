@@ -17,8 +17,6 @@ import { registerWebServiceEndpoint } from "@hyperledger/cactus-core";
 import { PluginLedgerConnectorBesu } from "../plugin-ledger-connector-besu";
 
 import OAS from "../../json/openapi.json";
-import axios from "axios";
-import { RuntimeError } from "run-time-error";
 
 export interface IGetTransactionEndpointOptions {
   logLevel?: LogLevelDesc;
@@ -91,19 +89,17 @@ export class GetTransactionEndpoint implements IWebServiceEndpoint {
       const resBody = await this.options.connector.getTransaction(reqBody);
       res.json(resBody);
     } catch (ex: unknown) {
-      if (axios.isAxiosError(ex)) {
-        this.log.error(`Crash while serving ${reqTag}`, ex);
+      this.log.error(`Crash while serving ${reqTag}`, ex);
+      if (ex instanceof Error) {
         res.status(500).json({
           message: "Internal Server Error",
           error: ex.stack || ex.message,
         });
-      } else if (ex instanceof Error) {
-        throw new RuntimeError("unexpected exception", ex);
       } else {
-        throw new RuntimeError(
-          "unexpected exception with incorrect type",
-          JSON.stringify(ex),
-        );
+        res.status(500).json({
+          message: "Internal Server Error",
+          error: JSON.stringify(ex),
+        });
       }
     }
   }

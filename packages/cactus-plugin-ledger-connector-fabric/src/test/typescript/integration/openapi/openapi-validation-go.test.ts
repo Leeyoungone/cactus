@@ -36,7 +36,6 @@ import { Configuration } from "@hyperledger/cactus-core-api";
 import { installOpenapiValidationMiddleware } from "@hyperledger/cactus-core";
 import OAS from "../../../../main/json/openapi.json";
 import axios from "axios";
-import { RuntimeError } from "run-time-error";
 
 const testCase = "check openapi validation in fabric endpoints";
 const logLevel: LogLevelDesc = "TRACE";
@@ -285,13 +284,8 @@ test(testCase, async (t: Test) => {
           fields.includes("targetPeerAddresses"),
           "Rejected because targetPeerAddresses is required",
         );
-      } else if (e instanceof Error) {
-        throw new RuntimeError("unexpected exception", e);
       } else {
-        throw new RuntimeError(
-          "unexpected exception with incorrect type",
-          JSON.stringify(e),
-        );
+        t2.fail("expected an axios error, got something else");
       }
     }
 
@@ -356,13 +350,8 @@ test(testCase, async (t: Test) => {
           fields.includes("fake"),
           "Rejected because fake is not a valid parameter",
         );
-      } else if (e instanceof Error) {
-        throw new RuntimeError("unexpected exception", e);
       } else {
-        throw new RuntimeError(
-          "unexpected exception with incorrect type",
-          JSON.stringify(e),
-        );
+        t2.fail("expected an axios error, got something else");
       }
     }
 

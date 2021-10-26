@@ -89,8 +89,8 @@ export class RunTransactionEndpointV1 implements IWebServiceEndpoint {
       res.status(200);
       res.json(resBody);
     } catch (ex: unknown) {
+      this.log.error(`${fnTag} failed to serve request`, ex);
       if (ex instanceof Error) {
-        this.log.error(`${fnTag} failed to serve request`, ex);
         res.status(500);
         res.statusMessage = ex.message;
         res.json({ error: ex.stack });

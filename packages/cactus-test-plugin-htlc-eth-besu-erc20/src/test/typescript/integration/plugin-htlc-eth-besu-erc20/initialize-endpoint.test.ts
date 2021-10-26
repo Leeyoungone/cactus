@@ -31,6 +31,7 @@ import {
 import { PluginKeychainMemory } from "@hyperledger/cactus-plugin-keychain-memory";
 
 import HashTimeLockJSON from "../../../../../../cactus-plugin-htlc-eth-besu-erc20/src/main/solidity/contracts/HashedTimeLockContract.json";
+import axios from "axios";
 
 const logLevel: LogLevelDesc = "INFO";
 const estimatedGas = 6721975;
@@ -234,8 +235,12 @@ test("Test initialize function with invalid params", async (t: Test) => {
   try {
     const res = await api.initializeV1(request);
     t.equal(res.status, 400, "response status is 400");
-  } catch (error) {
-    t.equal((error as any).response.status, 400, "response status is 400");
+  } catch (error: unknown) {
+    if (axios.isAxiosError(error)) {
+      t.equal(error.response?.status, 400, "response status is 400");
+    } else {
+      t.fail("expected an axios error, got something else");
+    }
   }
   t.end();
 });

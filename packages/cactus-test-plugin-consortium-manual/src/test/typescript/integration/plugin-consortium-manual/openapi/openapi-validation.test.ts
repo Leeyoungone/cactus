@@ -23,6 +23,7 @@ import {
   ConsortiumMember,
 } from "@hyperledger/cactus-core-api";
 import { PluginRegistry } from "@hyperledger/cactus-core";
+import axios from "axios";
 
 const testCase = "cactus-plugin-consortium-manual API";
 
@@ -281,19 +282,23 @@ test(testCase, async (t: Test) => {
     const api = new DefaultApi(configuration);
     try {
       await api.getNodeJwsV1({ fake: 4 });
-    } catch (e) {
-      t2.equal(
-        (e as any).response.status,
-        400,
-        `Endpoint ${fGetNodeJwt} with fake=4: response.status === 400 OK`,
-      );
-      const fields = (e as any).response.data.map((param: any) =>
-        param.path.replace(".body.", ""),
-      );
-      t2.ok(
-        fields.includes("fake"),
-        "Rejected because fake is not a valid parameter",
-      );
+    } catch (e: unknown) {
+      if (axios.isAxiosError(e)) {
+        t2.equal(
+          e.response?.status,
+          400,
+          `Endpoint ${fGetNodeJwt} with fake=4: response.status === 400 OK`,
+        );
+        const fields = e.response?.data.map((param: any) =>
+          param.path.replace(".body.", ""),
+        );
+        t2.ok(
+          fields.includes("fake"),
+          "Rejected because fake is not a valid parameter",
+        );
+      } else {
+        t2.fail("expected an axios error, got something else");
+      }
     }
 
     t2.end();
@@ -304,19 +309,23 @@ test(testCase, async (t: Test) => {
     const api = new DefaultApi(configuration);
     try {
       await api.getConsortiumJwsV1({ fake: 4 });
-    } catch (e) {
-      t2.equal(
-        (e as any).response.status,
-        400,
-        `Endpoint ${fGetConsortiumJws} with fake=4: response.status === 400 OK`,
-      );
-      const fields = (e as any).response.data.map((param: any) =>
-        param.path.replace(".body.", ""),
-      );
-      t2.ok(
-        fields.includes("fake"),
-        "Rejected because fake is not a valid parameter",
-      );
+    } catch (e: unknown) {
+      if (axios.isAxiosError(e)) {
+        t2.equal(
+          e.response?.status,
+          400,
+          `Endpoint ${fGetConsortiumJws} with fake=4: response.status === 400 OK`,
+        );
+        const fields = e.response?.data.map((param: any) =>
+          param.path.replace(".body.", ""),
+        );
+        t2.ok(
+          fields.includes("fake"),
+          "Rejected because fake is not a valid parameter",
+        );
+      } else {
+        t2.fail("expected an axios error, got something else");
+      }
     }
 
     t2.end();

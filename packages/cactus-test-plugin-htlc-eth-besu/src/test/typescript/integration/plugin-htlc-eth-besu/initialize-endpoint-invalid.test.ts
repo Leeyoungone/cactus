@@ -30,6 +30,7 @@ import { PluginKeychainMemory } from "@hyperledger/cactus-plugin-keychain-memory
 import { DataTest } from "../data-test";
 import DemoHelperJSON from "../../../solidity/contracts/DemoHelpers.json";
 import HashTimeLockJSON from "../../../../../../cactus-plugin-htlc-eth-besu/src/main/solidity/contracts/HashTimeLock.json";
+import axios from "axios";
 
 const connectorId = uuidv4();
 const logLevel: LogLevelDesc = "INFO";
@@ -140,8 +141,12 @@ test(testCase, async (t: Test) => {
       deployOut.transactionReceipt,
       "pluginHtlc.initialize() output.transactionReceipt is truthy OK",
     );
-  } catch (error) {
-    t.ok(error, "pluginHtlc.initialize() error is truthy OK");
+  } catch (error: unknown) {
+    if (axios.isAxiosError(error)) {
+      t.ok(error, "pluginHtlc.initialize() error is truthy OK");
+    } else {
+      t.fail("expected an axios error, got something else");
+    }
   }
   t.end();
 });

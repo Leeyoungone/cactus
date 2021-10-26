@@ -346,19 +346,21 @@ export class ApiServer {
     // need to invoke the i-cactus-plugin onPluginInit functionality here before plugin registry can be used further
     try {
       await plugin.onPluginInit();
-    } catch (error) {
-      const fnTag = `${this.className}#instantiatePlugin`;
-      const packageName = plugin.getPackageName();
-      const instanceId = plugin.getInstanceId();
-
-      const errorMessage = `${fnTag} failed calling onPluginInit() on the plugin '${packageName}' with the instanceId '${instanceId}'`;
-
-      this.log.error(errorMessage, error);
-
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error)) {
+        const fnTag = `${this.className}#instantiatePlugin`;
+        const packageName = plugin.getPackageName();
+        const instanceId = plugin.getInstanceId();
+        const errorMessage = `${fnTag} failed calling onPluginInit() on the plugin '${packageName}' with the instanceId '${instanceId}'`;
+        this.log.error(errorMessage, error);
+      }
       if (error instanceof Error) {
-        throw new RuntimeError(errorMessage, error);
+        throw new RuntimeError("unexpected exception", error);
       } else {
-        throw new RuntimeError(errorMessage, JSON.stringify(error));
+        throw new RuntimeError(
+          "unexpected exception with incorrect type",
+          JSON.stringify(error),
+        );
       }
     }
 

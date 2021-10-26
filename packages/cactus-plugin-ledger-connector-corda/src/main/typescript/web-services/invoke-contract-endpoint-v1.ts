@@ -18,8 +18,6 @@ import OAS from "../../json/openapi.json";
 
 import { registerWebServiceEndpoint } from "@hyperledger/cactus-core";
 import { PluginLedgerConnectorCorda } from "../plugin-ledger-connector-corda";
-import axios from "axios";
-import { RuntimeError } from "run-time-error";
 
 export interface IInvokeContractEndpointV1Options {
   logLevel?: LogLevelDesc;
@@ -90,18 +88,15 @@ export class InvokeContractEndpointV1 implements IWebServiceEndpoint {
       res.status(501);
       res.send(resBody);
     } catch (ex: unknown) {
-      if (axios.isAxiosError(ex)) {
-        this.log.error(`${fnTag} failed to serve request`, ex);
+      this.log.error(`${fnTag} failed to serve request`, ex);
+      if (ex instanceof Error) {
         res.status(500);
         res.statusMessage = ex.message;
         res.json({ error: ex.stack });
-      } else if (ex instanceof Error) {
-        throw new RuntimeError("unexpected exception", ex);
       } else {
-        throw new RuntimeError(
-          "unexpected exception with incorrect type",
-          JSON.stringify(ex),
-        );
+        res.status(500);
+        res.statusMessage = JSON.stringify(ex);
+        res.json({ error: JSON.stringify(ex) });
       }
     }
   }

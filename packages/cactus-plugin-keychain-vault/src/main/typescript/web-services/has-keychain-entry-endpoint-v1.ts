@@ -17,8 +17,6 @@ import { registerWebServiceEndpoint } from "@hyperledger/cactus-core";
 import OAS from "../../json/openapi.json";
 import { PluginKeychainVault } from "../plugin-keychain-vault";
 import { HasKeychainEntryResponseV1 } from "../generated/openapi/typescript-axios";
-import axios from "axios";
-import { RuntimeError } from "run-time-error";
 
 export interface IHasKeychainEntryEndpointV1Options {
   logLevel?: LogLevelDesc;
@@ -104,17 +102,13 @@ export class HasKeychainEntryEndpointV1 implements IWebServiceEndpoint {
       res.status(200);
       res.json(resBody);
     } catch (ex: unknown) {
-      if (axios.isAxiosError(ex)) {
-        this.log.debug(`${tag} Failed to serve request:`, ex);
+      this.log.debug(`${tag} Failed to serve request:`, ex);
+      if (ex instanceof Error) {
         res.status(500);
         res.json({ error: ex.stack });
-      } else if (ex instanceof Error) {
-        throw new RuntimeError("unexpected exception", ex);
       } else {
-        throw new RuntimeError(
-          "unexpected exception with incorrect type",
-          JSON.stringify(ex),
-        );
+        res.status(500);
+        res.json({ error: JSON.stringify(ex) });
       }
     }
   }

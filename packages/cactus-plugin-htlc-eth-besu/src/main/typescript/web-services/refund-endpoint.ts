@@ -15,8 +15,6 @@ import { registerWebServiceEndpoint } from "@hyperledger/cactus-core";
 import { PluginHtlcEthBesu } from "../plugin-htlc-eth-besu";
 import { RefundReq } from "../generated/openapi/typescript-axios";
 import OAS from "../../json/openapi.json";
-import axios from "axios";
-import { RuntimeError } from "run-time-error";
 
 export interface IRefundEndpointOptions {
   logLevel?: LogLevelDesc;
@@ -93,19 +91,17 @@ export class RefundEndpoint implements IWebServiceEndpoint {
         res.send(result);
       }
     } catch (ex: unknown) {
-      if (axios.isAxiosError(ex)) {
-        this.log.error(`${fnTag} failed to serve request`, ex);
+      this.log.error(`${fnTag} failed to serve request`, ex);
+      if (ex instanceof Error) {
         res.status(500).json({
           message: "Internal Server Error",
           error: ex.stack || ex.message,
         });
-      } else if (ex instanceof Error) {
-        throw new RuntimeError("unexpected exception", ex);
       } else {
-        throw new RuntimeError(
-          "unexpected exception with incorrect type",
-          JSON.stringify(ex),
-        );
+        res.status(500).json({
+          message: "Internal Server Error",
+          error: JSON.stringify(ex),
+        });
       }
     }
   }
